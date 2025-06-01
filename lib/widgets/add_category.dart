@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:readit/providers/category_provider.dart';
 
 class AddCategory extends ConsumerStatefulWidget {
   const AddCategory({super.key});
@@ -25,36 +26,39 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
-      child: Column(
-        children: [
-          AppBar(title: Text('Add Category')),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  TextField(
-                    controller: categoryController,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Theme.of(context).colorScheme.primaryContainer,
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      hintText: 'Category Name',
-                    ),
-                  ),
-                  SizedBox(height: 16),
-                  FilledButton(onPressed: () {}, child: Text('Add')),
-                ],
-              ),
-            ),
+    return AlertDialog(
+      title: Text("Create Category"),
+      content: TextField(
+        controller: categoryController,
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: Theme.of(context).colorScheme.primaryContainer,
+          border: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(25),
           ),
-        ],
+          hintText: 'Category Name',
+        ),
       ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () async {
+            final res = await ref
+                .read(categoryItemProvider.notifier)
+                .addCategory(categoryController.text);
+            if (res && mounted) {
+              Navigator.pop(context);
+            }
+          },
+          child: Text('Create'),
+        ),
+      ],
     );
   }
 }

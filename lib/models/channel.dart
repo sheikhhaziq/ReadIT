@@ -1,11 +1,11 @@
 import 'package:isar/isar.dart';
 import 'package:readit/models/category.dart';
-import 'feed_item.dart';
+import 'feed.dart';
 
 part 'channel.g.dart';
 
 @collection
-class Channel {
+class IsarChannel {
   Id id = Isar.autoIncrement;
 
   late String title;
@@ -18,6 +18,6 @@ class Channel {
   String? language;
   DateTime lastUpdated = DateTime.now();
 
-  final feeds = IsarLinks<FeedItem>();
-  final category = IsarLink<Category>();
+  final feeds = IsarLinks<IsarFeed>();
+  final category = IsarLink<IsarCategory>();
 }

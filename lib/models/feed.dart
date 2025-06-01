@@ -1,10 +1,10 @@
 import 'package:isar/isar.dart';
 import 'package:readit/models/channel.dart';
 
-part 'feed_item.g.dart';
+part 'feed.g.dart';
 
 @collection
-class FeedItem {
+class IsarFeed {
   Id id = Isar.autoIncrement;
 
   late String title;
@@ -21,5 +21,5 @@ class FeedItem {
   bool isRead = false;
   bool isBookmarked = false;
 
-  final channel = IsarLink<Channel>();
+  final channel = IsarLink<IsarChannel>();
 }

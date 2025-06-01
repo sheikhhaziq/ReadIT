@@ -1,5 +1,5 @@
 import 'package:isar/isar.dart';
-import 'package:readit/models/feed_item.dart';
+import 'package:readit/models/feed.dart';
 import 'package:readit/providers/isar_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -11,14 +11,13 @@ class HomeScreenViewModel extends _$HomeScreenViewModel {
   int page = 0;
   int limit = 10;
   @override
-  Future<List<FeedItem>> build() async {
+  Future<List<IsarFeed>> build() async {
     _isar = await ref.read(isarProvider.future);
     return fetchItems();
-    // return AsyncValue.data(items);
   }
 
-  Future<List<FeedItem>> fetchItems() async {
-    final items = await _isar.feedItems
+  Future<List<IsarFeed>> fetchItems() async {
+    final items = await _isar.isarFeeds
         .where()
         .sortByPublishedDesc()
         .offset(page * limit)

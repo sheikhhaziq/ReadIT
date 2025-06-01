@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   isar_flutter_libs
   system_theme
+  url_launcher_windows
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

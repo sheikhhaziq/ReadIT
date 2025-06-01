@@ -1,8 +1,9 @@
 import 'package:isar/isar.dart';
 import 'package:readit/models/category.dart';
 import 'package:readit/models/channel.dart';
-import 'package:readit/models/feed_item.dart';
+import 'package:readit/models/feed.dart';
 import 'package:readit/services/feeds/feed_parser.dart';
+import 'package:readit/services/feeds/models/channel.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'isar_provider.dart';
 
@@ -13,24 +14,25 @@ class FeedRepository extends _$FeedRepository {
   @override
   FutureOr<void> build() {}
 
-  Future<void> addFeedFromUrl(String url, Category category) async {
-    final isar = await ref.read(isarProvider.future);
-
+  Future<Channel?> getChannelFromUrl(String url) async {
     final parsedChannel = await FeedParser.parseFromUrl(url);
-    if (parsedChannel == null) return;
+    return parsedChannel;
+  }
 
-    final channel = Channel()
-      ..title = parsedChannel.title
-      ..link = parsedChannel.link
-      ..description = parsedChannel.description
-      ..image = parsedChannel.image
-      ..creator = parsedChannel.creator
-      ..publisher = parsedChannel.publisher
-      ..rights = parsedChannel.rights
-      ..language = parsedChannel.language;
+  Future<void> addFeed(Channel channel, IsarCategory category) async {
+    final isar = await ref.read(isarProvider.future);
+    final isarchannel = IsarChannel()
+      ..title = channel.title
+      ..link = channel.link
+      ..description = channel.description
+      ..image = channel.image
+      ..creator = channel.creator
+      ..publisher = channel.publisher
+      ..rights = channel.rights
+      ..language = channel.language;
 
-    final feedItems = parsedChannel.feeds.map((f) {
-      return FeedItem()
+    final feedItems = channel.feeds.map((f) {
+      return IsarFeed()
         ..title = f.title
         ..link = f.link
         ..description = f.description
@@ -45,30 +47,30 @@ class FeedRepository extends _$FeedRepository {
     }).toList();
 
     await isar.writeTxn(() async {
-      await isar.feedItems.putAll(feedItems);
-      channel.feeds.addAll(feedItems);
-      await isar.channels.put(channel);
-      await channel.feeds.save();
+      await isar.isarFeeds.putAll(feedItems);
+      isarchannel.feeds.addAll(feedItems);
+      await isar.isarChannels.put(isarchannel);
+      await isarchannel.feeds.save();
 
-      category.channels.add(channel);
-      await isar.categorys.put(category);
+      category.channels.add(isarchannel);
+      await isar.isarCategorys.put(category);
       await category.channels.save();
     });
   }
 
-  Future<List<Channel>> getChannelsByCategory(Category category) async {
+  Future<List<IsarChannel>> getChannelsByCategory(IsarCategory category) async {
     await category.channels.load();
     return category.channels.toList();
   }
 
-  Future<List<Category>> getAllCategories() async {
+  Future<List<IsarCategory>> getAllCategories() async {
     final isar = await ref.read(isarProvider.future);
-    return await isar.categorys.where().findAll();
+    return await isar.isarCategorys.where().findAll();
   }
 
   Future<void> createCategory(String name) async {
     final isar = await ref.read(isarProvider.future);
-    final category = Category()..name = name;
-    await isar.writeTxn(() => isar.categorys.put(category));
+    final category = IsarCategory()..name = name;
+    await isar.writeTxn(() => isar.isarCategorys.put(category));
   }
 }

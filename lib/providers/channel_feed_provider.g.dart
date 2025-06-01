@@ -6,7 +6,7 @@ part of 'channel_feed_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$channelFeedItemsHash() => r'df5062f4299e79f3b35c3a2c5a5df5f3a865e56f';
+String _$channelFeedItemsHash() => r'e109b5bdb930de1ccff198849e42e58f23d87fed';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,10 +30,10 @@ class _SystemHash {
 }
 
 abstract class _$ChannelFeedItems
-    extends BuildlessAutoDisposeAsyncNotifier<List<FeedItem>> {
+    extends BuildlessAutoDisposeAsyncNotifier<List<IsarFeed>> {
   late final int channelId;
 
-  FutureOr<List<FeedItem>> build(
+  FutureOr<List<IsarFeed>> build(
     int channelId,
   );
 }
@@ -43,7 +43,7 @@ abstract class _$ChannelFeedItems
 const channelFeedItemsProvider = ChannelFeedItemsFamily();
 
 /// See also [ChannelFeedItems].
-class ChannelFeedItemsFamily extends Family<AsyncValue<List<FeedItem>>> {
+class ChannelFeedItemsFamily extends Family<AsyncValue<List<IsarFeed>>> {
   /// See also [ChannelFeedItems].
   const ChannelFeedItemsFamily();
 
@@ -82,7 +82,7 @@ class ChannelFeedItemsFamily extends Family<AsyncValue<List<FeedItem>>> {
 
 /// See also [ChannelFeedItems].
 class ChannelFeedItemsProvider extends AutoDisposeAsyncNotifierProviderImpl<
-    ChannelFeedItems, List<FeedItem>> {
+    ChannelFeedItems, List<IsarFeed>> {
   /// See also [ChannelFeedItems].
   ChannelFeedItemsProvider(
     int channelId,
@@ -113,7 +113,7 @@ class ChannelFeedItemsProvider extends AutoDisposeAsyncNotifierProviderImpl<
   final int channelId;
 
   @override
-  FutureOr<List<FeedItem>> runNotifierBuild(
+  FutureOr<List<IsarFeed>> runNotifierBuild(
     covariant ChannelFeedItems notifier,
   ) {
     return notifier.build(
@@ -138,7 +138,7 @@ class ChannelFeedItemsProvider extends AutoDisposeAsyncNotifierProviderImpl<
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<ChannelFeedItems, List<FeedItem>>
+  AutoDisposeAsyncNotifierProviderElement<ChannelFeedItems, List<IsarFeed>>
       createElement() {
     return _ChannelFeedItemsProviderElement(this);
   }
@@ -160,14 +160,14 @@ class ChannelFeedItemsProvider extends AutoDisposeAsyncNotifierProviderImpl<
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 mixin ChannelFeedItemsRef
-    on AutoDisposeAsyncNotifierProviderRef<List<FeedItem>> {
+    on AutoDisposeAsyncNotifierProviderRef<List<IsarFeed>> {
   /// The parameter `channelId` of this provider.
   int get channelId;
 }
 
 class _ChannelFeedItemsProviderElement
     extends AutoDisposeAsyncNotifierProviderElement<ChannelFeedItems,
-        List<FeedItem>> with ChannelFeedItemsRef {
+        List<IsarFeed>> with ChannelFeedItemsRef {
   _ChannelFeedItemsProviderElement(super.provider);
 
   @override

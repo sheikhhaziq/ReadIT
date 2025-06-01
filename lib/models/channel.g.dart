@@ -9,13 +9,13 @@ part of 'channel.dart';
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
-extension GetChannelCollection on Isar {
-  IsarCollection<Channel> get channels => this.collection();
+extension GetIsarChannelCollection on Isar {
+  IsarCollection<IsarChannel> get isarChannels => this.collection();
 }
 
-const ChannelSchema = CollectionSchema(
-  name: r'Channel',
-  id: 3096422491918372507,
+const IsarChannelSchema = CollectionSchema(
+  name: r'IsarChannel',
+  id: 6559311121825661033,
   properties: {
     r'creator': PropertySchema(
       id: 0,
@@ -63,35 +63,35 @@ const ChannelSchema = CollectionSchema(
       type: IsarType.string,
     )
   },
-  estimateSize: _channelEstimateSize,
-  serialize: _channelSerialize,
-  deserialize: _channelDeserialize,
-  deserializeProp: _channelDeserializeProp,
+  estimateSize: _isarChannelEstimateSize,
+  serialize: _isarChannelSerialize,
+  deserialize: _isarChannelDeserialize,
+  deserializeProp: _isarChannelDeserializeProp,
   idName: r'id',
   indexes: {},
   links: {
     r'feeds': LinkSchema(
-      id: 3425515073900664639,
+      id: 7335546516639731380,
       name: r'feeds',
-      target: r'FeedItem',
+      target: r'IsarFeed',
       single: false,
     ),
     r'category': LinkSchema(
-      id: 2730466874956288245,
+      id: 7893972876359040226,
       name: r'category',
-      target: r'Category',
+      target: r'IsarCategory',
       single: true,
     )
   },
   embeddedSchemas: {},
-  getId: _channelGetId,
-  getLinks: _channelGetLinks,
-  attach: _channelAttach,
+  getId: _isarChannelGetId,
+  getLinks: _isarChannelGetLinks,
+  attach: _isarChannelAttach,
   version: '3.1.8',
 );
 
-int _channelEstimateSize(
-  Channel object,
+int _isarChannelEstimateSize(
+  IsarChannel object,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
@@ -142,8 +142,8 @@ int _channelEstimateSize(
   return bytesCount;
 }
 
-void _channelSerialize(
-  Channel object,
+void _isarChannelSerialize(
+  IsarChannel object,
   IsarWriter writer,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
@@ -159,13 +159,13 @@ void _channelSerialize(
   writer.writeString(offsets[8], object.title);
 }
 
-Channel _channelDeserialize(
+IsarChannel _isarChannelDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = Channel();
+  final object = IsarChannel();
   object.creator = reader.readStringOrNull(offsets[0]);
   object.description = reader.readStringOrNull(offsets[1]);
   object.id = id;
@@ -179,7 +179,7 @@ Channel _channelDeserialize(
   return object;
 }
 
-P _channelDeserializeProp<P>(
+P _isarChannelDeserializeProp<P>(
   IsarReader reader,
   int propertyId,
   int offset,
@@ -209,30 +209,34 @@ P _channelDeserializeProp<P>(
   }
 }
 
-Id _channelGetId(Channel object) {
+Id _isarChannelGetId(IsarChannel object) {
   return object.id;
 }
 
-List<IsarLinkBase<dynamic>> _channelGetLinks(Channel object) {
+List<IsarLinkBase<dynamic>> _isarChannelGetLinks(IsarChannel object) {
   return [object.feeds, object.category];
 }
 
-void _channelAttach(IsarCollection<dynamic> col, Id id, Channel object) {
+void _isarChannelAttach(
+    IsarCollection<dynamic> col, Id id, IsarChannel object) {
   object.id = id;
-  object.feeds.attach(col, col.isar.collection<FeedItem>(), r'feeds', id);
-  object.category.attach(col, col.isar.collection<Category>(), r'category', id);
+  object.feeds.attach(col, col.isar.collection<IsarFeed>(), r'feeds', id);
+  object.category
+      .attach(col, col.isar.collection<IsarCategory>(), r'category', id);
 }
 
-extension ChannelQueryWhereSort on QueryBuilder<Channel, Channel, QWhere> {
-  QueryBuilder<Channel, Channel, QAfterWhere> anyId() {
+extension IsarChannelQueryWhereSort
+    on QueryBuilder<IsarChannel, IsarChannel, QWhere> {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterWhere> anyId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
     });
   }
 }
 
-extension ChannelQueryWhere on QueryBuilder<Channel, Channel, QWhereClause> {
-  QueryBuilder<Channel, Channel, QAfterWhereClause> idEqualTo(Id id) {
+extension IsarChannelQueryWhere
+    on QueryBuilder<IsarChannel, IsarChannel, QWhereClause> {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterWhereClause> idEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
         lower: id,
@@ -241,7 +245,8 @@ extension ChannelQueryWhere on QueryBuilder<Channel, Channel, QWhereClause> {
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterWhereClause> idNotEqualTo(Id id) {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterWhereClause> idNotEqualTo(
+      Id id) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -263,7 +268,7 @@ extension ChannelQueryWhere on QueryBuilder<Channel, Channel, QWhereClause> {
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterWhereClause> idGreaterThan(Id id,
+  QueryBuilder<IsarChannel, IsarChannel, QAfterWhereClause> idGreaterThan(Id id,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -272,7 +277,7 @@ extension ChannelQueryWhere on QueryBuilder<Channel, Channel, QWhereClause> {
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterWhereClause> idLessThan(Id id,
+  QueryBuilder<IsarChannel, IsarChannel, QAfterWhereClause> idLessThan(Id id,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -281,7 +286,7 @@ extension ChannelQueryWhere on QueryBuilder<Channel, Channel, QWhereClause> {
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterWhereClause> idBetween(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterWhereClause> idBetween(
     Id lowerId,
     Id upperId, {
     bool includeLower = true,
@@ -298,9 +303,10 @@ extension ChannelQueryWhere on QueryBuilder<Channel, Channel, QWhereClause> {
   }
 }
 
-extension ChannelQueryFilter
-    on QueryBuilder<Channel, Channel, QFilterCondition> {
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> creatorIsNull() {
+extension IsarChannelQueryFilter
+    on QueryBuilder<IsarChannel, IsarChannel, QFilterCondition> {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      creatorIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'creator',
@@ -308,7 +314,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> creatorIsNotNull() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      creatorIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'creator',
@@ -316,7 +323,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> creatorEqualTo(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> creatorEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -329,7 +336,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> creatorGreaterThan(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      creatorGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -344,7 +352,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> creatorLessThan(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> creatorLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -359,7 +367,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> creatorBetween(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> creatorBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -378,7 +386,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> creatorStartsWith(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      creatorStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -391,7 +400,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> creatorEndsWith(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> creatorEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -404,7 +413,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> creatorContains(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> creatorContains(
       String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -416,7 +425,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> creatorMatches(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> creatorMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -428,7 +437,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> creatorIsEmpty() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      creatorIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'creator',
@@ -437,7 +447,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> creatorIsNotEmpty() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      creatorIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'creator',
@@ -446,7 +457,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> descriptionIsNull() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      descriptionIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'description',
@@ -454,7 +466,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> descriptionIsNotNull() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      descriptionIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'description',
@@ -462,7 +475,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> descriptionEqualTo(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      descriptionEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -475,7 +489,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> descriptionGreaterThan(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      descriptionGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -490,7 +505,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> descriptionLessThan(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      descriptionLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -505,7 +521,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> descriptionBetween(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      descriptionBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -524,7 +541,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> descriptionStartsWith(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      descriptionStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -537,7 +555,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> descriptionEndsWith(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      descriptionEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -550,9 +569,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> descriptionContains(
-      String value,
-      {bool caseSensitive = true}) {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      descriptionContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'description',
@@ -562,9 +580,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> descriptionMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      descriptionMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'description',
@@ -574,7 +591,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> descriptionIsEmpty() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      descriptionIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'description',
@@ -583,7 +601,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition>
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
       descriptionIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -593,7 +611,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> idEqualTo(Id value) {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> idEqualTo(
+      Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'id',
@@ -602,7 +621,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> idGreaterThan(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> idGreaterThan(
     Id value, {
     bool include = false,
   }) {
@@ -615,7 +634,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> idLessThan(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> idLessThan(
     Id value, {
     bool include = false,
   }) {
@@ -628,7 +647,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> idBetween(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> idBetween(
     Id lower,
     Id upper, {
     bool includeLower = true,
@@ -645,7 +664,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> imageIsNull() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> imageIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'image',
@@ -653,7 +672,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> imageIsNotNull() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      imageIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'image',
@@ -661,7 +681,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> imageEqualTo(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> imageEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -674,7 +694,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> imageGreaterThan(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      imageGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -689,7 +710,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> imageLessThan(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> imageLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -704,7 +725,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> imageBetween(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> imageBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -723,7 +744,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> imageStartsWith(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> imageStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -736,7 +757,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> imageEndsWith(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> imageEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -749,7 +770,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> imageContains(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> imageContains(
       String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -761,7 +782,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> imageMatches(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> imageMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -773,7 +794,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> imageIsEmpty() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> imageIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'image',
@@ -782,7 +803,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> imageIsNotEmpty() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      imageIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'image',
@@ -791,7 +813,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> languageIsNull() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      languageIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'language',
@@ -799,7 +822,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> languageIsNotNull() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      languageIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'language',
@@ -807,7 +831,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> languageEqualTo(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> languageEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -820,7 +844,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> languageGreaterThan(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      languageGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -835,7 +860,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> languageLessThan(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      languageLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -850,7 +876,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> languageBetween(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> languageBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -869,7 +895,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> languageStartsWith(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      languageStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -882,7 +909,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> languageEndsWith(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      languageEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -895,9 +923,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> languageContains(
-      String value,
-      {bool caseSensitive = true}) {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      languageContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'language',
@@ -907,7 +934,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> languageMatches(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> languageMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -919,7 +946,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> languageIsEmpty() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      languageIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'language',
@@ -928,7 +956,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> languageIsNotEmpty() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      languageIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'language',
@@ -937,8 +966,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> lastUpdatedEqualTo(
-      DateTime value) {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      lastUpdatedEqualTo(DateTime value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'lastUpdated',
@@ -947,7 +976,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> lastUpdatedGreaterThan(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      lastUpdatedGreaterThan(
     DateTime value, {
     bool include = false,
   }) {
@@ -960,7 +990,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> lastUpdatedLessThan(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      lastUpdatedLessThan(
     DateTime value, {
     bool include = false,
   }) {
@@ -973,7 +1004,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> lastUpdatedBetween(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      lastUpdatedBetween(
     DateTime lower,
     DateTime upper, {
     bool includeLower = true,
@@ -990,7 +1022,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> linkIsNull() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> linkIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'link',
@@ -998,7 +1030,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> linkIsNotNull() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      linkIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'link',
@@ -1006,7 +1039,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> linkEqualTo(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> linkEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -1019,7 +1052,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> linkGreaterThan(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> linkGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1034,7 +1067,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> linkLessThan(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> linkLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1049,7 +1082,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> linkBetween(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> linkBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -1068,7 +1101,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> linkStartsWith(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> linkStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1081,7 +1114,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> linkEndsWith(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> linkEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1094,7 +1127,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> linkContains(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> linkContains(
       String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1106,7 +1139,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> linkMatches(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> linkMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1118,7 +1151,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> linkIsEmpty() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> linkIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'link',
@@ -1127,7 +1160,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> linkIsNotEmpty() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      linkIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'link',
@@ -1136,7 +1170,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> publisherIsNull() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      publisherIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'publisher',
@@ -1144,7 +1179,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> publisherIsNotNull() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      publisherIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'publisher',
@@ -1152,7 +1188,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> publisherEqualTo(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      publisherEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -1165,7 +1202,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> publisherGreaterThan(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      publisherGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1180,7 +1218,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> publisherLessThan(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      publisherLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1195,7 +1234,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> publisherBetween(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      publisherBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -1214,7 +1254,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> publisherStartsWith(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      publisherStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1227,7 +1268,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> publisherEndsWith(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      publisherEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1240,9 +1282,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> publisherContains(
-      String value,
-      {bool caseSensitive = true}) {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      publisherContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'publisher',
@@ -1252,9 +1293,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> publisherMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      publisherMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'publisher',
@@ -1264,7 +1304,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> publisherIsEmpty() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      publisherIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'publisher',
@@ -1273,7 +1314,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> publisherIsNotEmpty() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      publisherIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'publisher',
@@ -1282,7 +1324,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> rightsIsNull() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> rightsIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'rights',
@@ -1290,7 +1332,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> rightsIsNotNull() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      rightsIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'rights',
@@ -1298,7 +1341,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> rightsEqualTo(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> rightsEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -1311,7 +1354,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> rightsGreaterThan(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      rightsGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1326,7 +1370,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> rightsLessThan(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> rightsLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1341,7 +1385,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> rightsBetween(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> rightsBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -1360,7 +1404,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> rightsStartsWith(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      rightsStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1373,7 +1418,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> rightsEndsWith(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> rightsEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1386,7 +1431,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> rightsContains(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> rightsContains(
       String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1398,7 +1443,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> rightsMatches(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> rightsMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1410,7 +1455,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> rightsIsEmpty() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      rightsIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'rights',
@@ -1419,7 +1465,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> rightsIsNotEmpty() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      rightsIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'rights',
@@ -1428,7 +1475,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> titleEqualTo(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> titleEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1441,7 +1488,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> titleGreaterThan(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      titleGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1456,7 +1504,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> titleLessThan(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> titleLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1471,7 +1519,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> titleBetween(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> titleBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -1490,7 +1538,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> titleStartsWith(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> titleStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1503,7 +1551,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> titleEndsWith(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> titleEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1516,7 +1564,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> titleContains(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> titleContains(
       String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1528,7 +1576,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> titleMatches(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> titleMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1540,7 +1588,7 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> titleIsEmpty() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> titleIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'title',
@@ -1549,7 +1597,8 @@ extension ChannelQueryFilter
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> titleIsNotEmpty() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      titleIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'title',
@@ -1559,38 +1608,40 @@ extension ChannelQueryFilter
   }
 }
 
-extension ChannelQueryObject
-    on QueryBuilder<Channel, Channel, QFilterCondition> {}
+extension IsarChannelQueryObject
+    on QueryBuilder<IsarChannel, IsarChannel, QFilterCondition> {}
 
-extension ChannelQueryLinks
-    on QueryBuilder<Channel, Channel, QFilterCondition> {
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> feeds(
-      FilterQuery<FeedItem> q) {
+extension IsarChannelQueryLinks
+    on QueryBuilder<IsarChannel, IsarChannel, QFilterCondition> {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> feeds(
+      FilterQuery<IsarFeed> q) {
     return QueryBuilder.apply(this, (query) {
       return query.link(q, r'feeds');
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> feedsLengthEqualTo(
-      int length) {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      feedsLengthEqualTo(int length) {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'feeds', length, true, length, true);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> feedsIsEmpty() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> feedsIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'feeds', 0, true, 0, true);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> feedsIsNotEmpty() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      feedsIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'feeds', 0, false, 999999, true);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> feedsLengthLessThan(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      feedsLengthLessThan(
     int length, {
     bool include = false,
   }) {
@@ -1599,7 +1650,8 @@ extension ChannelQueryLinks
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> feedsLengthGreaterThan(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      feedsLengthGreaterThan(
     int length, {
     bool include = false,
   }) {
@@ -1608,7 +1660,8 @@ extension ChannelQueryLinks
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> feedsLengthBetween(
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      feedsLengthBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -1620,311 +1673,313 @@ extension ChannelQueryLinks
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> category(
-      FilterQuery<Category> q) {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> category(
+      FilterQuery<IsarCategory> q) {
     return QueryBuilder.apply(this, (query) {
       return query.link(q, r'category');
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterFilterCondition> categoryIsNull() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      categoryIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'category', 0, true, 0, true);
     });
   }
 }
 
-extension ChannelQuerySortBy on QueryBuilder<Channel, Channel, QSortBy> {
-  QueryBuilder<Channel, Channel, QAfterSortBy> sortByCreator() {
+extension IsarChannelQuerySortBy
+    on QueryBuilder<IsarChannel, IsarChannel, QSortBy> {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> sortByCreator() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'creator', Sort.asc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> sortByCreatorDesc() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> sortByCreatorDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'creator', Sort.desc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> sortByDescription() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> sortByDescription() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'description', Sort.asc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> sortByDescriptionDesc() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> sortByDescriptionDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'description', Sort.desc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> sortByImage() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> sortByImage() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'image', Sort.asc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> sortByImageDesc() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> sortByImageDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'image', Sort.desc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> sortByLanguage() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> sortByLanguage() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'language', Sort.asc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> sortByLanguageDesc() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> sortByLanguageDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'language', Sort.desc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> sortByLastUpdated() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> sortByLastUpdated() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'lastUpdated', Sort.asc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> sortByLastUpdatedDesc() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> sortByLastUpdatedDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'lastUpdated', Sort.desc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> sortByLink() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> sortByLink() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'link', Sort.asc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> sortByLinkDesc() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> sortByLinkDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'link', Sort.desc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> sortByPublisher() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> sortByPublisher() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'publisher', Sort.asc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> sortByPublisherDesc() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> sortByPublisherDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'publisher', Sort.desc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> sortByRights() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> sortByRights() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'rights', Sort.asc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> sortByRightsDesc() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> sortByRightsDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'rights', Sort.desc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> sortByTitle() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> sortByTitle() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'title', Sort.asc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> sortByTitleDesc() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> sortByTitleDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'title', Sort.desc);
     });
   }
 }
 
-extension ChannelQuerySortThenBy
-    on QueryBuilder<Channel, Channel, QSortThenBy> {
-  QueryBuilder<Channel, Channel, QAfterSortBy> thenByCreator() {
+extension IsarChannelQuerySortThenBy
+    on QueryBuilder<IsarChannel, IsarChannel, QSortThenBy> {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenByCreator() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'creator', Sort.asc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> thenByCreatorDesc() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenByCreatorDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'creator', Sort.desc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> thenByDescription() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenByDescription() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'description', Sort.asc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> thenByDescriptionDesc() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenByDescriptionDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'description', Sort.desc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> thenById() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> thenByIdDesc() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> thenByImage() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenByImage() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'image', Sort.asc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> thenByImageDesc() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenByImageDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'image', Sort.desc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> thenByLanguage() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenByLanguage() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'language', Sort.asc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> thenByLanguageDesc() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenByLanguageDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'language', Sort.desc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> thenByLastUpdated() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenByLastUpdated() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'lastUpdated', Sort.asc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> thenByLastUpdatedDesc() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenByLastUpdatedDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'lastUpdated', Sort.desc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> thenByLink() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenByLink() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'link', Sort.asc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> thenByLinkDesc() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenByLinkDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'link', Sort.desc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> thenByPublisher() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenByPublisher() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'publisher', Sort.asc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> thenByPublisherDesc() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenByPublisherDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'publisher', Sort.desc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> thenByRights() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenByRights() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'rights', Sort.asc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> thenByRightsDesc() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenByRightsDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'rights', Sort.desc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> thenByTitle() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenByTitle() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'title', Sort.asc);
     });
   }
 
-  QueryBuilder<Channel, Channel, QAfterSortBy> thenByTitleDesc() {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenByTitleDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'title', Sort.desc);
     });
   }
 }
 
-extension ChannelQueryWhereDistinct
-    on QueryBuilder<Channel, Channel, QDistinct> {
-  QueryBuilder<Channel, Channel, QDistinct> distinctByCreator(
+extension IsarChannelQueryWhereDistinct
+    on QueryBuilder<IsarChannel, IsarChannel, QDistinct> {
+  QueryBuilder<IsarChannel, IsarChannel, QDistinct> distinctByCreator(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'creator', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<Channel, Channel, QDistinct> distinctByDescription(
+  QueryBuilder<IsarChannel, IsarChannel, QDistinct> distinctByDescription(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'description', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<Channel, Channel, QDistinct> distinctByImage(
+  QueryBuilder<IsarChannel, IsarChannel, QDistinct> distinctByImage(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'image', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<Channel, Channel, QDistinct> distinctByLanguage(
+  QueryBuilder<IsarChannel, IsarChannel, QDistinct> distinctByLanguage(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'language', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<Channel, Channel, QDistinct> distinctByLastUpdated() {
+  QueryBuilder<IsarChannel, IsarChannel, QDistinct> distinctByLastUpdated() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'lastUpdated');
     });
   }
 
-  QueryBuilder<Channel, Channel, QDistinct> distinctByLink(
+  QueryBuilder<IsarChannel, IsarChannel, QDistinct> distinctByLink(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'link', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<Channel, Channel, QDistinct> distinctByPublisher(
+  QueryBuilder<IsarChannel, IsarChannel, QDistinct> distinctByPublisher(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'publisher', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<Channel, Channel, QDistinct> distinctByRights(
+  QueryBuilder<IsarChannel, IsarChannel, QDistinct> distinctByRights(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'rights', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<Channel, Channel, QDistinct> distinctByTitle(
+  QueryBuilder<IsarChannel, IsarChannel, QDistinct> distinctByTitle(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'title', caseSensitive: caseSensitive);
@@ -1932,63 +1987,63 @@ extension ChannelQueryWhereDistinct
   }
 }
 
-extension ChannelQueryProperty
-    on QueryBuilder<Channel, Channel, QQueryProperty> {
-  QueryBuilder<Channel, int, QQueryOperations> idProperty() {
+extension IsarChannelQueryProperty
+    on QueryBuilder<IsarChannel, IsarChannel, QQueryProperty> {
+  QueryBuilder<IsarChannel, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
     });
   }
 
-  QueryBuilder<Channel, String?, QQueryOperations> creatorProperty() {
+  QueryBuilder<IsarChannel, String?, QQueryOperations> creatorProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'creator');
     });
   }
 
-  QueryBuilder<Channel, String?, QQueryOperations> descriptionProperty() {
+  QueryBuilder<IsarChannel, String?, QQueryOperations> descriptionProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'description');
     });
   }
 
-  QueryBuilder<Channel, String?, QQueryOperations> imageProperty() {
+  QueryBuilder<IsarChannel, String?, QQueryOperations> imageProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'image');
     });
   }
 
-  QueryBuilder<Channel, String?, QQueryOperations> languageProperty() {
+  QueryBuilder<IsarChannel, String?, QQueryOperations> languageProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'language');
     });
   }
 
-  QueryBuilder<Channel, DateTime, QQueryOperations> lastUpdatedProperty() {
+  QueryBuilder<IsarChannel, DateTime, QQueryOperations> lastUpdatedProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'lastUpdated');
     });
   }
 
-  QueryBuilder<Channel, String?, QQueryOperations> linkProperty() {
+  QueryBuilder<IsarChannel, String?, QQueryOperations> linkProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'link');
     });
   }
 
-  QueryBuilder<Channel, String?, QQueryOperations> publisherProperty() {
+  QueryBuilder<IsarChannel, String?, QQueryOperations> publisherProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'publisher');
     });
   }
 
-  QueryBuilder<Channel, String?, QQueryOperations> rightsProperty() {
+  QueryBuilder<IsarChannel, String?, QQueryOperations> rightsProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'rights');
     });
   }
 
-  QueryBuilder<Channel, String, QQueryOperations> titleProperty() {
+  QueryBuilder<IsarChannel, String, QQueryOperations> titleProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'title');
     });

@@ -5,10 +5,11 @@ import 'channel.dart';
 part 'category.g.dart';
 
 @collection
-class Category {
+class IsarCategory {
   Id id = Isar.autoIncrement;
 
+  @Index(unique: true)
   late String name;
 
-  final channels = IsarLinks<Channel>();
+  final channels = IsarLinks<IsarChannel>();
 }
