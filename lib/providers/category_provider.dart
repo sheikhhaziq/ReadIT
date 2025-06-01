@@ -6,6 +6,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'category_provider.g.dart';
 
+// final categoryReadCountProvider = Provider((ref, categoryId) async {
+//   return;
+// });
+
 @riverpod
 class CategoryItem extends _$CategoryItem {
   late Isar _isar;
