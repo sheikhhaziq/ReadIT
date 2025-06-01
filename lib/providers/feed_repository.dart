@@ -31,27 +31,42 @@ class FeedRepository extends _$FeedRepository {
       ..rights = channel.rights
       ..language = channel.language;
 
-    final feedItems = channel.feeds.map((f) {
-      return IsarFeed()
-        ..title = f.title
-        ..link = f.link
-        ..description = f.description
-        ..content = f.content
-        ..published = f.published
-        ..image = f.image
-        ..creator = f.creator
-        ..publisher = f.publisher
-        ..rights = f.rights
-        ..language = f.language
-        ..guid = f.guid;
-    }).toList();
-
     await isar.writeTxn(() async {
-      await isar.isarFeeds.putAll(feedItems);
-      isarchannel.feeds.addAll(feedItems);
+      // ✅ Step 1: Save the channel first so it gets an ID
       await isar.isarChannels.put(isarchannel);
+
+      // ✅ Step 2: Create and link feeds
+      final feedItems = channel.feeds.map((f) {
+        final feed = IsarFeed()
+          ..title = f.title
+          ..link = f.link
+          ..description = f.description
+          ..content = f.content
+          ..published = f.published
+          ..image = f.image
+          ..creator = f.creator
+          ..publisher = f.publisher
+          ..rights = f.rights
+          ..language = f.language
+          ..guid = f.guid;
+
+        feed.channel.value = isarchannel;
+        return feed;
+      }).toList();
+
+      // ✅ Step 3: Save feeds
+      await isar.isarFeeds.putAll(feedItems);
+
+      // ✅ Step 4: Save links
+      for (final feed in feedItems) {
+        await feed.channel.save();
+      }
+
+      // ✅ Step 5: Link channel to feeds (reverse link)
+      isarchannel.feeds.addAll(feedItems);
       await isarchannel.feeds.save();
 
+      // ✅ Step 6: Add channel to category
       category.channels.add(isarchannel);
       await isar.isarCategorys.put(category);
       await category.channels.save();

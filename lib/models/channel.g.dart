@@ -71,10 +71,11 @@ const IsarChannelSchema = CollectionSchema(
   indexes: {},
   links: {
     r'feeds': LinkSchema(
-      id: 7335546516639731380,
+      id: 6304346679962831190,
       name: r'feeds',
       target: r'IsarFeed',
       single: false,
+      linkName: r'channel',
     ),
     r'category': LinkSchema(
       id: 7893972876359040226,

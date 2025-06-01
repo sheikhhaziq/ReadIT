@@ -16,6 +16,11 @@ Future<Isar> isar(Ref ref) async {
     IsarFeedSchema,
     IsarCategorySchema,
   ], directory: dir.path);
+  // await isar.writeTxn(() async {
+  //   await isar.isarCategorys.clear();
+  //   await isar.isarChannels.clear();
+  //   await isar.isarFeeds.clear();
+  // });
   final existing = await isar.isarCategorys
       .filter()
       .nameEqualTo('Default')

@@ -11,5 +11,14 @@ class IsarCategory {
   @Index(unique: true)
   late String name;
 
+  @Backlink(to: 'category')
   final channels = IsarLinks<IsarChannel>();
+}
+
+class CategoryWithUnread {
+  final String name;
+  final int unreadCount;
+  final List<ChannelWithUnread> channels;
+
+  CategoryWithUnread(this.name, this.unreadCount, this.channels);
 }

@@ -18,6 +18,15 @@ class IsarChannel {
   String? language;
   DateTime lastUpdated = DateTime.now();
 
+  @Backlink(to: 'channel')
   final feeds = IsarLinks<IsarFeed>();
+
   final category = IsarLink<IsarCategory>();
+}
+
+class ChannelWithUnread {
+  final IsarChannel channel;
+  final int unreadCount;
+
+  ChannelWithUnread(this.channel, this.unreadCount);
 }

@@ -8,8 +8,9 @@ part 'home_screen_view_model.g.dart';
 @riverpod
 class HomeScreenViewModel extends _$HomeScreenViewModel {
   late Isar _isar;
-  int page = 0;
-  int limit = 10;
+  int _page = 0;
+  final int _limit = 10;
+  bool _completed = false;
   @override
   Future<List<IsarFeed>> build() async {
     _isar = await ref.read(isarProvider.future);
@@ -20,21 +21,26 @@ class HomeScreenViewModel extends _$HomeScreenViewModel {
     final items = await _isar.isarFeeds
         .where()
         .sortByPublishedDesc()
-        .offset(page * limit)
-        .limit(limit)
+        .offset(_page * _limit)
+        .limit(_limit)
         .findAll();
-
+    for (var item in items) {
+      await item.channel.load();
+    }
+    _completed = items.length < _limit;
     return items;
   }
 
-  Future<void> fetchMore() async {
-    page++;
+  Future<bool> fetchMore() async {
+    _page++;
     final moreItems = await fetchItems();
     state = AsyncValue.data([...state.value ?? [], ...moreItems]);
+    _completed = moreItems.length < _limit;
+    return _completed;
   }
 
   Future<void> refreshItems() async {
-    page = 0;
+    _page = 0;
     state = const AsyncLoading();
     final newItems = await fetchItems();
     state = AsyncValue.data(newItems);

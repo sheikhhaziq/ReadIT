@@ -49,7 +49,18 @@ class _AddChannelState extends ConsumerState<AddChannel> {
     return AlertDialog(
       icon: (channel?.image == null)
           ? null
-          : DynamicNetworkImage(channel!.image!),
+          : Builder(
+              builder: (context) {
+                return Column(
+                  children: [
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 50, maxHeight: 50),
+                      child: DynamicNetworkImage(channel!.image!),
+                    ),
+                  ],
+                );
+              },
+            ),
       title: Text(channel == null ? "Add Feed" : channel!.title),
       content: channel == null
           ? TextField(
