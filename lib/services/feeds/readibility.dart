@@ -227,13 +227,13 @@ class ReadableHtmlConverter {
         final parent = element.parent;
         if (parent != null) {
           final index = parent.children.indexOf(element);
-          element.children.reversed.forEach((child) {
+          for (var child in element.children.reversed) {
             // Insert in reverse to maintain order
             parent.children.insert(
               index,
               child.clone(true),
             ); // Clone to avoid issues with live list
-          });
+          }
           element.remove();
         }
       }
@@ -284,9 +284,9 @@ class ReadableHtmlConverter {
         'ol',
         'table',
       }.contains(element.localName)) {
-        element.children.forEach(
-          (child) => findAndScoreCandidates(child, depth + 1),
-        );
+        for (var child in element.children) {
+          findAndScoreCandidates(child, depth + 1);
+        }
       }
     }
 
@@ -352,7 +352,7 @@ class ReadableHtmlConverter {
 
     for (var el in allElements) {
       List<String> attributesToRemove = [];
-      el.attributes.keys.forEach((attrKey) {
+      for (var attrKey in el.attributes.keys) {
         if (attrKey is String) {
           final attrKeyLower = attrKey.toLowerCase();
           if (_attributesToRemove.contains(attrKeyLower) ||
@@ -365,8 +365,10 @@ class ReadableHtmlConverter {
             attributesToRemove.add(attrKey);
           }
         }
-      });
-      attributesToRemove.forEach((attr) => el.attributes.remove(attr));
+      }
+      for (var attr in attributesToRemove) {
+        el.attributes.remove(attr);
+      }
 
       // Remove empty tags that are not self-closing or void elements
       // Be careful not to remove <img/>, <hr/>, <br/> etc.
@@ -438,8 +440,9 @@ class ReadableHtmlConverter {
       }
     }
     score *= penaltyMultiplier;
-    if (score < 0 && penaltyMultiplier < 1.0)
+    if (score < 0 && penaltyMultiplier < 1.0) {
       score = 0; // Don't let penalties alone make score too negative initially.
+    }
 
     // 2. Text content length
     String currentElementText = element.nodes
@@ -468,7 +471,9 @@ class ReadableHtmlConverter {
     // 4. Link density (penalize if too many links compared to text)
     int linkTextLength = 0;
     List<Element> links = element.querySelectorAll('a');
-    links.forEach((a) => linkTextLength += a.text.trim().length);
+    for (var a in links) {
+      linkTextLength += a.text.trim().length;
+    }
 
     if (textLength > 0 && linkTextLength > textLength * 0.4) {
       // Over 40% link text
@@ -488,15 +493,17 @@ class ReadableHtmlConverter {
     int shortTextChildren = 0; // Children that are mostly text but very short
     double childrenContentScore = 0;
 
-    element.children.forEach((child) {
+    for (var child in element.children) {
       String childText = child.text.trim();
       if (_contentTags.contains(child.localName) && childText.length > 50) {
         significantChildren++;
         childrenContentScore += childText.length * 0.1;
-        if (child.localName == 'p' && childText.length > 80)
+        if (child.localName == 'p' && childText.length > 80) {
           childrenContentScore += 20; // Bonus for good P
-        if (RegExp(r'^h[1-6]$').hasMatch(child.localName!))
+        }
+        if (RegExp(r'^h[1-6]$').hasMatch(child.localName!)) {
           childrenContentScore += 15; // Bonus for headings
+        }
       } else if (childText.length > 10 &&
           childText.length < 50 &&
           child.children.isEmpty) {
@@ -504,18 +511,19 @@ class ReadableHtmlConverter {
       }
 
       // Penalize if child itself has strong negative indicators (e.g. a div full of share buttons inside candidate)
-      String childClassAndId = (child.className + ' ' + child.id).toLowerCase();
+      String childClassAndId = ('${child.className} ${child.id}').toLowerCase();
       for (var matcherEntry in _penaltyMatchers) {
         final pattern = matcherEntry['pattern'];
         final weight = matcherEntry['weight'] as double;
         if (pattern is String && childClassAndId.contains(pattern) ||
             pattern is RegExp && pattern.hasMatch(childClassAndId)) {
-          if (weight < 0.3)
+          if (weight < 0.3) {
             childrenContentScore -= 50; // Strong penalty for very bad children
+          }
           break; // Apply first strong penalty
         }
       }
-    });
+    }
     score += childrenContentScore;
 
     if (element.children.isNotEmpty) {

@@ -6,7 +6,6 @@ import 'package:readit/models/article_with_channel.dart';
 import 'package:readit/views/content_screen.dart';
 import 'package:readit/widgets/dynamic_network_image.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:url_launcher/url_launcher.dart';
 
 class ArticleTile extends ConsumerWidget {
   const ArticleTile({
@@ -27,7 +26,6 @@ class ArticleTile extends ConsumerWidget {
       onTap: () async {
         onTap(article);
         if (article.link != null) {
-          // await launchUrl(Uri.parse(article.link!));
           Navigator.push(
             context,
             MaterialPageRoute(builder: (_) => ContentScreen(article: article)),
