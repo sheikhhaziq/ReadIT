@@ -70,12 +70,11 @@ const IsarChannelSchema = CollectionSchema(
   idName: r'id',
   indexes: {},
   links: {
-    r'feeds': LinkSchema(
-      id: 6304346679962831190,
-      name: r'feeds',
-      target: r'IsarFeed',
+    r'articles': LinkSchema(
+      id: -1765035576128054425,
+      name: r'articles',
+      target: r'IsarArticle',
       single: false,
-      linkName: r'channel',
     ),
     r'category': LinkSchema(
       id: 7893972876359040226,
@@ -215,13 +214,14 @@ Id _isarChannelGetId(IsarChannel object) {
 }
 
 List<IsarLinkBase<dynamic>> _isarChannelGetLinks(IsarChannel object) {
-  return [object.feeds, object.category];
+  return [object.articles, object.category];
 }
 
 void _isarChannelAttach(
     IsarCollection<dynamic> col, Id id, IsarChannel object) {
   object.id = id;
-  object.feeds.attach(col, col.isar.collection<IsarFeed>(), r'feeds', id);
+  object.articles
+      .attach(col, col.isar.collection<IsarArticle>(), r'articles', id);
   object.category
       .attach(col, col.isar.collection<IsarCategory>(), r'category', id);
 }
@@ -1614,55 +1614,56 @@ extension IsarChannelQueryObject
 
 extension IsarChannelQueryLinks
     on QueryBuilder<IsarChannel, IsarChannel, QFilterCondition> {
-  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> feeds(
-      FilterQuery<IsarFeed> q) {
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> articles(
+      FilterQuery<IsarArticle> q) {
     return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'feeds');
+      return query.link(q, r'articles');
     });
   }
 
   QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
-      feedsLengthEqualTo(int length) {
+      articlesLengthEqualTo(int length) {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'feeds', length, true, length, true);
-    });
-  }
-
-  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> feedsIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'feeds', 0, true, 0, true);
+      return query.linkLength(r'articles', length, true, length, true);
     });
   }
 
   QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
-      feedsIsNotEmpty() {
+      articlesIsEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'feeds', 0, false, 999999, true);
+      return query.linkLength(r'articles', 0, true, 0, true);
     });
   }
 
   QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
-      feedsLengthLessThan(
+      articlesIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'articles', 0, false, 999999, true);
+    });
+  }
+
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      articlesLengthLessThan(
     int length, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'feeds', 0, true, length, include);
+      return query.linkLength(r'articles', 0, true, length, include);
     });
   }
 
   QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
-      feedsLengthGreaterThan(
+      articlesLengthGreaterThan(
     int length, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'feeds', length, include, 999999, true);
+      return query.linkLength(r'articles', length, include, 999999, true);
     });
   }
 
   QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
-      feedsLengthBetween(
+      articlesLengthBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -1670,7 +1671,7 @@ extension IsarChannelQueryLinks
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(
-          r'feeds', lower, includeLower, upper, includeUpper);
+          r'articles', lower, includeLower, upper, includeUpper);
     });
   }
 

@@ -45,11 +45,10 @@ const IsarCategorySchema = CollectionSchema(
   },
   links: {
     r'channels': LinkSchema(
-      id: -791209528365130428,
+      id: -8750904895911952664,
       name: r'channels',
       target: r'IsarChannel',
       single: false,
-      linkName: r'category',
     )
   },
   embeddedSchemas: {},

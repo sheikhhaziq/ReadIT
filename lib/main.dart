@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:readit/screens/home_screen/home_screen.dart';
+import 'package:readit/views/home_screen/home_screen.dart';
 import 'package:system_theme/system_theme.dart';
 
 void main() {

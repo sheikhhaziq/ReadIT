@@ -1,6 +1,6 @@
 import 'package:isar/isar.dart';
+import 'package:readit/models/article.dart';
 import 'package:readit/models/category.dart';
-import 'feed.dart';
 
 part 'channel.g.dart';
 
@@ -18,15 +18,7 @@ class IsarChannel {
   String? language;
   DateTime lastUpdated = DateTime.now();
 
-  @Backlink(to: 'channel')
-  final feeds = IsarLinks<IsarFeed>();
+  final articles = IsarLinks<IsarArticle>();
 
   final category = IsarLink<IsarCategory>();
-}
-
-class ChannelWithUnread {
-  final IsarChannel channel;
-  final int unreadCount;
-
-  ChannelWithUnread(this.channel, this.unreadCount);
 }

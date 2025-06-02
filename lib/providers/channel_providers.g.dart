@@ -1,12 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'channel_feed_provider.dart';
+part of 'channel_providers.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$channelFeedItemsHash() => r'e109b5bdb930de1ccff198849e42e58f23d87fed';
+String _$channelWithUnreadCountHash() =>
+    r'25f984ef6bd816a58d1c1893f03a904acdbf6359';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,36 +30,28 @@ class _SystemHash {
   }
 }
 
-abstract class _$ChannelFeedItems
-    extends BuildlessAutoDisposeAsyncNotifier<List<IsarFeed>> {
-  late final int channelId;
+/// See also [channelWithUnreadCount].
+@ProviderFor(channelWithUnreadCount)
+const channelWithUnreadCountProvider = ChannelWithUnreadCountFamily();
 
-  FutureOr<List<IsarFeed>> build(
-    int channelId,
-  );
-}
+/// See also [channelWithUnreadCount].
+class ChannelWithUnreadCountFamily
+    extends Family<AsyncValue<(IsarChannel, int)>> {
+  /// See also [channelWithUnreadCount].
+  const ChannelWithUnreadCountFamily();
 
-/// See also [ChannelFeedItems].
-@ProviderFor(ChannelFeedItems)
-const channelFeedItemsProvider = ChannelFeedItemsFamily();
-
-/// See also [ChannelFeedItems].
-class ChannelFeedItemsFamily extends Family<AsyncValue<List<IsarFeed>>> {
-  /// See also [ChannelFeedItems].
-  const ChannelFeedItemsFamily();
-
-  /// See also [ChannelFeedItems].
-  ChannelFeedItemsProvider call(
+  /// See also [channelWithUnreadCount].
+  ChannelWithUnreadCountProvider call(
     int channelId,
   ) {
-    return ChannelFeedItemsProvider(
+    return ChannelWithUnreadCountProvider(
       channelId,
     );
   }
 
   @override
-  ChannelFeedItemsProvider getProviderOverride(
-    covariant ChannelFeedItemsProvider provider,
+  ChannelWithUnreadCountProvider getProviderOverride(
+    covariant ChannelWithUnreadCountProvider provider,
   ) {
     return call(
       provider.channelId,
@@ -77,30 +70,33 @@ class ChannelFeedItemsFamily extends Family<AsyncValue<List<IsarFeed>>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'channelFeedItemsProvider';
+  String? get name => r'channelWithUnreadCountProvider';
 }
 
-/// See also [ChannelFeedItems].
-class ChannelFeedItemsProvider extends AutoDisposeAsyncNotifierProviderImpl<
-    ChannelFeedItems, List<IsarFeed>> {
-  /// See also [ChannelFeedItems].
-  ChannelFeedItemsProvider(
+/// See also [channelWithUnreadCount].
+class ChannelWithUnreadCountProvider
+    extends AutoDisposeStreamProvider<(IsarChannel, int)> {
+  /// See also [channelWithUnreadCount].
+  ChannelWithUnreadCountProvider(
     int channelId,
   ) : this._internal(
-          () => ChannelFeedItems()..channelId = channelId,
-          from: channelFeedItemsProvider,
-          name: r'channelFeedItemsProvider',
+          (ref) => channelWithUnreadCount(
+            ref as ChannelWithUnreadCountRef,
+            channelId,
+          ),
+          from: channelWithUnreadCountProvider,
+          name: r'channelWithUnreadCountProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$channelFeedItemsHash,
-          dependencies: ChannelFeedItemsFamily._dependencies,
+                  : _$channelWithUnreadCountHash,
+          dependencies: ChannelWithUnreadCountFamily._dependencies,
           allTransitiveDependencies:
-              ChannelFeedItemsFamily._allTransitiveDependencies,
+              ChannelWithUnreadCountFamily._allTransitiveDependencies,
           channelId: channelId,
         );
 
-  ChannelFeedItemsProvider._internal(
+  ChannelWithUnreadCountProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -113,20 +109,14 @@ class ChannelFeedItemsProvider extends AutoDisposeAsyncNotifierProviderImpl<
   final int channelId;
 
   @override
-  FutureOr<List<IsarFeed>> runNotifierBuild(
-    covariant ChannelFeedItems notifier,
+  Override overrideWith(
+    Stream<(IsarChannel, int)> Function(ChannelWithUnreadCountRef provider)
+        create,
   ) {
-    return notifier.build(
-      channelId,
-    );
-  }
-
-  @override
-  Override overrideWith(ChannelFeedItems Function() create) {
     return ProviderOverride(
       origin: this,
-      override: ChannelFeedItemsProvider._internal(
-        () => create()..channelId = channelId,
+      override: ChannelWithUnreadCountProvider._internal(
+        (ref) => create(ref as ChannelWithUnreadCountRef),
         from: from,
         name: null,
         dependencies: null,
@@ -138,14 +128,14 @@ class ChannelFeedItemsProvider extends AutoDisposeAsyncNotifierProviderImpl<
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<ChannelFeedItems, List<IsarFeed>>
-      createElement() {
-    return _ChannelFeedItemsProviderElement(this);
+  AutoDisposeStreamProviderElement<(IsarChannel, int)> createElement() {
+    return _ChannelWithUnreadCountProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is ChannelFeedItemsProvider && other.channelId == channelId;
+    return other is ChannelWithUnreadCountProvider &&
+        other.channelId == channelId;
   }
 
   @override
@@ -159,19 +149,19 @@ class ChannelFeedItemsProvider extends AutoDisposeAsyncNotifierProviderImpl<
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin ChannelFeedItemsRef
-    on AutoDisposeAsyncNotifierProviderRef<List<IsarFeed>> {
+mixin ChannelWithUnreadCountRef
+    on AutoDisposeStreamProviderRef<(IsarChannel, int)> {
   /// The parameter `channelId` of this provider.
   int get channelId;
 }
 
-class _ChannelFeedItemsProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<ChannelFeedItems,
-        List<IsarFeed>> with ChannelFeedItemsRef {
-  _ChannelFeedItemsProviderElement(super.provider);
+class _ChannelWithUnreadCountProviderElement
+    extends AutoDisposeStreamProviderElement<(IsarChannel, int)>
+    with ChannelWithUnreadCountRef {
+  _ChannelWithUnreadCountProviderElement(super.provider);
 
   @override
-  int get channelId => (origin as ChannelFeedItemsProvider).channelId;
+  int get channelId => (origin as ChannelWithUnreadCountProvider).channelId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -1,10 +1,10 @@
 import 'package:isar/isar.dart';
 import 'package:readit/models/channel.dart';
 
-part 'feed.g.dart';
+part 'article.g.dart';
 
 @collection
-class IsarFeed {
+class IsarArticle {
   Id id = Isar.autoIncrement;
 
   late String title;

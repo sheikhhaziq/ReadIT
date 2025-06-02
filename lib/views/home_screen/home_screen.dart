@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:readit/screens/home_screen/custom_drawer.dart';
-import 'package:readit/screens/home_screen/home_screen_view_model.dart';
+import 'package:readit/viewmodels/home_viewmodel.dart';
+import 'package:readit/views/home_screen/custom_drawer.dart';
 import 'package:readit/widgets/add_channel.dart';
 import 'package:readit/widgets/article_tile.dart';
 
@@ -15,7 +15,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   late ScrollController _scrollController;
   bool loadingMore = false;
-  bool _completed = false;
 
   @override
   void initState() {
@@ -37,12 +36,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
     if (_scrollController.position.pixels >=
             _scrollController.position.maxScrollExtent - 200 &&
-        !loadingMore &&
-        !_completed) {
+        !loadingMore) {
       setState(() => loadingMore = true);
-      _completed = await ref
-          .read(homeScreenViewModelProvider.notifier)
-          .fetchMore();
+      ref.read(homeViewModelProvider.notifier).loadMore();
+
       setState(() => loadingMore = false);
     }
   }
@@ -55,22 +52,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       drawer: CustomDrawer(),
 
       body: ref
-          .watch(homeScreenViewModelProvider)
+          .watch(homeViewModelProvider)
           .when(
             data: (articles) {
-              return ListView.separated(
-                key: const PageStorageKey<String>('homeFeedList'),
-                controller: _scrollController,
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                itemCount: articles.length + (loadingMore ? 1 : 0),
-                separatorBuilder: (context, index) => SizedBox(height: 8),
-                itemBuilder: (context, index) {
-                  if (index == articles.length) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                  final article = articles[index];
-                  return ArticleTile(article: article);
-                },
+              return RefreshIndicator(
+                onRefresh: ref.read(homeViewModelProvider.notifier).refresh,
+                child: ListView.separated(
+                  key: const PageStorageKey<String>('homeFeedList'),
+                  controller: _scrollController,
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  itemCount: articles.length,
+                  separatorBuilder: (context, index) => SizedBox(height: 8),
+                  itemBuilder: (context, index) {
+                    final articleWithChannel = articles[index];
+                    return ArticleTile(
+                      articleWithChannel: articleWithChannel,
+                      onTap: (article) async {
+                        if (!article.isRead) {
+                          await ref
+                              .read(homeViewModelProvider.notifier)
+                              .markArticleAsRead(article.id);
+                        }
+                      },
+                    );
+                  },
+                ),
               );
             },
             error: (e, s) => Center(child: Text(e.toString())),

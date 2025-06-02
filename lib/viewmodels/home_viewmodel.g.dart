@@ -1,27 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'home_screen_view_model.dart';
+part of 'home_viewmodel.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$homeScreenViewModelHash() =>
-    r'60431453cb52ba829e60c0a05ca7b36cf74a4e5a';
+String _$homeViewModelHash() => r'995041d32c8a86c98124a1eba38132e168186002';
 
-/// See also [HomeScreenViewModel].
-@ProviderFor(HomeScreenViewModel)
-final homeScreenViewModelProvider = AutoDisposeAsyncNotifierProvider<
-    HomeScreenViewModel, List<IsarFeed>>.internal(
-  HomeScreenViewModel.new,
-  name: r'homeScreenViewModelProvider',
+/// See also [HomeViewModel].
+@ProviderFor(HomeViewModel)
+final homeViewModelProvider = AutoDisposeAsyncNotifierProvider<HomeViewModel,
+    List<ArticleWithChannel>>.internal(
+  HomeViewModel.new,
+  name: r'homeViewModelProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$homeScreenViewModelHash,
+      : _$homeViewModelHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$HomeScreenViewModel = AutoDisposeAsyncNotifier<List<IsarFeed>>;
+typedef _$HomeViewModel = AutoDisposeAsyncNotifier<List<ArticleWithChannel>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

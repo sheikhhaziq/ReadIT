@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:readit/providers/category_provider.dart';
+import 'package:readit/providers/category_providers.dart';
 
 class AddCategory extends ConsumerStatefulWidget {
   const AddCategory({super.key});
@@ -50,7 +50,7 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
         TextButton(
           onPressed: () async {
             final res = await ref
-                .read(categoryItemProvider.notifier)
+                .read(categoryControllerProvider.notifier)
                 .addCategory(categoryController.text);
             if (res && mounted) {
               Navigator.pop(context);

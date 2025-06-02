@@ -1,20 +1,30 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:readit/models/feed.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:readit/models/article.dart';
+import 'package:readit/models/article_with_channel.dart';
 import 'package:readit/widgets/dynamic_network_image.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:url_launcher/url_launcher.dart';
 
-class ArticleTile extends StatelessWidget {
-  const ArticleTile({super.key, required this.article});
+class ArticleTile extends ConsumerWidget {
+  const ArticleTile({
+    super.key,
+    required this.articleWithChannel,
+    required this.onTap,
+  });
 
-  final IsarFeed article;
+  final ArticleWithChannel articleWithChannel;
+
+  final void Function(IsarArticle article) onTap;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final article = articleWithChannel.article;
     return InkWell(
       borderRadius: BorderRadius.circular(8),
       onTap: () async {
+        onTap(article);
         if (article.link != null) {
           await launchUrl(Uri.parse(article.link!));
         }
@@ -32,22 +42,22 @@ class ArticleTile extends StatelessWidget {
                       width: 30,
                       height: 30,
                       child:
-                          (article.channel.value?.image != null ||
-                              article.channel.value?.title != null)
+                          (articleWithChannel.channelImage != null ||
+                              articleWithChannel.channelTitle != null)
                           ? CircleAvatar(
                               radius: 30,
-                              child: article.channel.value?.image != null
+                              child: articleWithChannel.channelImage != null
                                   ? ClipRRect(
                                       borderRadius:
                                           BorderRadiusGeometry.circular(15),
                                       child: DynamicNetworkImage(
-                                        article.channel.value!.image!,
+                                        articleWithChannel.channelImage!,
                                         height: 30,
                                         width: 30,
                                       ),
                                     )
                                   : Text(
-                                      article.channel.value!.title
+                                      articleWithChannel.channelTitle!
                                           .split(" ")
                                           .map((e) => e[0])
                                           .join(),
@@ -63,11 +73,11 @@ class ArticleTile extends StatelessWidget {
                             )
                           : null,
                     ),
-                    if (article.channel.value?.title != null)
+                    if (articleWithChannel.channelTitle != null)
                       SizedBox(width: 8),
-                    if (article.channel.value?.title != null)
+                    if (articleWithChannel.channelTitle != null)
                       Text(
-                        article.channel.value!.title,
+                        articleWithChannel.channelTitle!,
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
                           color: article.isRead
                               ? Theme.of(context).hintColor
