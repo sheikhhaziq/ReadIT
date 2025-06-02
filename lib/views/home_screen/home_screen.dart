@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:readit/providers/channel_providers.dart';
 import 'package:readit/viewmodels/home_viewmodel.dart';
 import 'package:readit/views/home_screen/custom_drawer.dart';
 import 'package:readit/widgets/add_channel.dart';
-import 'package:readit/widgets/article_with_channel_tile.dart';
+import 'package:readit/widgets/article_tile.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -44,6 +45,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
+  Future<void> refreshArticles() async {
+    await ref.read(syncAllChannelsProvider.future);
+    await ref.read(homeViewModelProvider.notifier).refresh();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +62,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           .when(
             data: (articles) {
               return RefreshIndicator(
-                onRefresh: ref.read(homeViewModelProvider.notifier).refresh,
+                onRefresh: refreshArticles,
                 child: ListView.separated(
                   controller: _scrollController,
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -64,7 +70,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   separatorBuilder: (context, index) => SizedBox(height: 8),
                   itemBuilder: (context, index) {
                     final articleWithChannel = articles[index];
-                    return ArticleWithChannelTile(
+                    return ArticleTile(
                       articleWithChannel: articleWithChannel,
                       onTap: (article) async {
                         if (!article.isRead) {

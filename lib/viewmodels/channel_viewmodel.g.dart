@@ -6,7 +6,7 @@ part of 'channel_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$channelViewmodelHash() => r'2f9fd2dbafd5e1aae9a19dad914f60bae04b7841';
+String _$channelViewmodelHash() => r'cab01f94e597ca893b865f20853ff110a7428769';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,10 +30,10 @@ class _SystemHash {
 }
 
 abstract class _$ChannelViewmodel
-    extends BuildlessAutoDisposeAsyncNotifier<List<IsarArticle>> {
+    extends BuildlessAutoDisposeAsyncNotifier<List<ArticleWithChannel>> {
   late final int channelId;
 
-  FutureOr<List<IsarArticle>> build(
+  FutureOr<List<ArticleWithChannel>> build(
     int channelId,
   );
 }
@@ -43,7 +43,8 @@ abstract class _$ChannelViewmodel
 const channelViewmodelProvider = ChannelViewmodelFamily();
 
 /// See also [ChannelViewmodel].
-class ChannelViewmodelFamily extends Family<AsyncValue<List<IsarArticle>>> {
+class ChannelViewmodelFamily
+    extends Family<AsyncValue<List<ArticleWithChannel>>> {
   /// See also [ChannelViewmodel].
   const ChannelViewmodelFamily();
 
@@ -82,7 +83,7 @@ class ChannelViewmodelFamily extends Family<AsyncValue<List<IsarArticle>>> {
 
 /// See also [ChannelViewmodel].
 class ChannelViewmodelProvider extends AutoDisposeAsyncNotifierProviderImpl<
-    ChannelViewmodel, List<IsarArticle>> {
+    ChannelViewmodel, List<ArticleWithChannel>> {
   /// See also [ChannelViewmodel].
   ChannelViewmodelProvider(
     int channelId,
@@ -113,7 +114,7 @@ class ChannelViewmodelProvider extends AutoDisposeAsyncNotifierProviderImpl<
   final int channelId;
 
   @override
-  FutureOr<List<IsarArticle>> runNotifierBuild(
+  FutureOr<List<ArticleWithChannel>> runNotifierBuild(
     covariant ChannelViewmodel notifier,
   ) {
     return notifier.build(
@@ -138,8 +139,8 @@ class ChannelViewmodelProvider extends AutoDisposeAsyncNotifierProviderImpl<
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<ChannelViewmodel, List<IsarArticle>>
-      createElement() {
+  AutoDisposeAsyncNotifierProviderElement<ChannelViewmodel,
+      List<ArticleWithChannel>> createElement() {
     return _ChannelViewmodelProviderElement(this);
   }
 
@@ -160,14 +161,14 @@ class ChannelViewmodelProvider extends AutoDisposeAsyncNotifierProviderImpl<
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 mixin ChannelViewmodelRef
-    on AutoDisposeAsyncNotifierProviderRef<List<IsarArticle>> {
+    on AutoDisposeAsyncNotifierProviderRef<List<ArticleWithChannel>> {
   /// The parameter `channelId` of this provider.
   int get channelId;
 }
 
 class _ChannelViewmodelProviderElement
     extends AutoDisposeAsyncNotifierProviderElement<ChannelViewmodel,
-        List<IsarArticle>> with ChannelViewmodelRef {
+        List<ArticleWithChannel>> with ChannelViewmodelRef {
   _ChannelViewmodelProviderElement(super.provider);
 
   @override

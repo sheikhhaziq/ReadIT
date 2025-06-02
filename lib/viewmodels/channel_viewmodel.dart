@@ -1,5 +1,5 @@
 import 'package:isar/isar.dart';
-import 'package:readit/models/article.dart';
+import 'package:readit/models/article_with_channel.dart';
 import 'package:readit/providers/article_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -11,38 +11,34 @@ class ChannelViewmodel extends _$ChannelViewmodel {
   int _offset = 0;
   final int _limit = 20;
   bool _loadingMore = false;
-  bool _completed = false;
 
   @override
-  Future<List<IsarArticle>> build(Id channelId) async {
+  FutureOr<List<ArticleWithChannel>> build(Id channelId) async {
     _channelId = channelId;
-
-    return _loadInitial();
+    return await _loadInitial();
   }
 
-  Future<List<IsarArticle>> _loadInitial() async {
-    final articles = await ref.read(
-      articlesByChannelProvider(_channelId, _offset, _limit).future,
+  Future<List<ArticleWithChannel>> _loadInitial() async {
+    final page = await ref.read(
+      articleWithChannelByIdProvider(_channelId, _offset, _limit).future,
     );
     _offset += _limit;
-    _completed = articles.length < _limit;
-    return articles;
+    return page;
   }
 
   Future<void> loadMore() async {
     // Prevent double loading
-    if (state.isLoading || _loadingMore || _completed) return;
+    if (state.isLoading || _loadingMore) return;
 
     _loadingMore = true;
 
     try {
-      final articles = await ref.refresh(
-        articlesByChannelProvider(_channelId, _offset, _limit).future,
+      final page = await ref.read(
+        articleWithChannelByIdProvider(_channelId, _offset, _limit).future,
       );
-      // Merge new articles into existing state
-      state = AsyncValue.data([...state.value ?? [], ...articles]);
+      // Merge new page into existing state
+      state = AsyncValue.data([...state.value ?? [], ...page]);
       _offset += _limit;
-      _completed = articles.length < _limit;
     } catch (e, st) {
       state = AsyncValue.error(e, st);
     } finally {
@@ -65,16 +61,16 @@ class ChannelViewmodel extends _$ChannelViewmodel {
   Future<void> markArticleAsRead(Id articleId) async {
     await ref.read(markReadArticleProvider(articleId).future);
 
-    final current = state.value; // ChannelWithArticles
+    // Update state manually so UI rebuilds
+    final current = state.value;
     if (current != null) {
-      final updatedArticles = current.map<IsarArticle>((a) {
-        if (a.id == articleId) {
-          a.isRead = true;
+      final updated = current.map((a) {
+        if (a.article.id == articleId) {
+          a.article.isRead = true;
         }
         return a;
       }).toList();
-
-      state = AsyncValue.data(updatedArticles);
+      state = AsyncValue.data(updated);
     }
   }
 }

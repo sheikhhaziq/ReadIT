@@ -2,7 +2,6 @@ import 'package:isar/isar.dart';
 import 'package:readit/models/article_with_channel.dart';
 import 'package:readit/providers/article_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../providers/article_channel_provider.dart';
 
 part 'home_viewmodel.g.dart';
 
@@ -19,7 +18,7 @@ class HomeViewModel extends _$HomeViewModel {
 
   Future<List<ArticleWithChannel>> _loadInitial() async {
     final page = await ref.read(
-      articleWithChannelPageProvider(_offset, _limit).future,
+      articleWithChannelProvider(_offset, _limit).future,
     );
     _offset += _limit;
     return page;
@@ -33,7 +32,7 @@ class HomeViewModel extends _$HomeViewModel {
 
     try {
       final page = await ref.read(
-        articleWithChannelPageProvider(_offset, _limit).future,
+        articleWithChannelProvider(_offset, _limit).future,
       );
       // Merge new page into existing state
       state = AsyncValue.data([...state.value ?? [], ...page]);

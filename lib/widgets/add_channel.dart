@@ -4,6 +4,7 @@ import 'package:readit/models/category.dart';
 import 'package:readit/providers/category_providers.dart';
 import 'package:readit/providers/feed_preview_provider.dart';
 import 'package:readit/providers/feed_saver_provider.dart';
+import 'package:readit/viewmodels/home_viewmodel.dart';
 import 'package:readit/widgets/add_category.dart';
 import 'package:readit/widgets/dynamic_network_image.dart';
 
@@ -190,6 +191,7 @@ class _AddChannelState extends ConsumerState<AddChannel> {
                       await ref
                           .read(feedSaverProvider.notifier)
                           .save(channel, category!);
+                      await ref.read(homeViewModelProvider.notifier).refresh();
                       if (mounted) {
                         Navigator.pop(context);
                       }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readit/views/home_screen/home_screen.dart';
 import 'package:system_theme/system_theme.dart';
@@ -23,6 +24,12 @@ class MyApp extends StatelessWidget {
               seedColor: systemAccent.accent,
               brightness: Brightness.light,
             ),
+            appBarTheme: AppBarTheme(
+              systemOverlayStyle: SystemUiOverlayStyle(
+                systemNavigationBarColor: Colors.transparent,
+                systemNavigationBarIconBrightness: Brightness.dark,
+              ),
+            ),
             useSystemColors: true,
             useMaterial3: true,
             visualDensity: VisualDensity.comfortable,
@@ -32,6 +39,12 @@ class MyApp extends StatelessWidget {
             colorScheme: ColorScheme.fromSeed(
               seedColor: systemAccent.accent,
               brightness: Brightness.dark,
+            ),
+            appBarTheme: AppBarTheme(
+              systemOverlayStyle: SystemUiOverlayStyle(
+                systemNavigationBarColor: Colors.transparent,
+                systemNavigationBarIconBrightness: Brightness.light,
+              ),
             ),
             useSystemColors: true,
             useMaterial3: true,

@@ -37,22 +37,20 @@ Stream<(IsarChannel, int)> channelWithUnreadCount(
 }
 
 @riverpod
-Future<void> syncChannel(Ref ref, Id channelId) async {
+Future<void> syncChannel(Ref ref, Id channelId, {IsarChannel? channel}) async {
   final isar = await ref.watch(isarInstanceProvider.future);
-  final channel = await isar.isarChannels
-      .where()
-      .idEqualTo(channelId)
-      .findFirst();
+
+  channel ??= await isar.isarChannels.where().idEqualTo(channelId).findFirst();
 
   if (channel == null) {
     return;
   }
+  IsarChannel isarChannel = channel;
 
   try {
     final parsed = await ref
         .read(feedPreviewProvider.notifier)
         .getFeed(channel.feedUrl);
-
     if (parsed == null) {
       return;
     }
@@ -62,7 +60,7 @@ Future<void> syncChannel(Ref ref, Id channelId) async {
     }
     final existingGuids = await isar.isarArticles
         .filter()
-        .channel((q) => q.idEqualTo(channel.id))
+        .channel((q) => q.idEqualTo(isarChannel.id))
         .guidIsNotNull()
         .findAll()
         .then((list) => list.map((a) => a.guid).toSet());
@@ -87,7 +85,7 @@ Future<void> syncChannel(Ref ref, Id channelId) async {
           ..language = a.language
           ..guid = a.guid
           ..isRead = false
-          ..channel.value = channel; // Set reverse link
+          ..channel.value = isarChannel; // Set reverse link
 
         return article;
       }).toList();
@@ -96,9 +94,9 @@ Future<void> syncChannel(Ref ref, Id channelId) async {
         await article.channel.save();
       }
 
-      channel.lastUpdated = DateTime.now();
-      channel.lastBuildDate = parsed.lastBuildDate;
-      await isar.isarChannels.put(channel);
+      isarChannel.lastUpdated = DateTime.now();
+      isarChannel.lastBuildDate = parsed.lastBuildDate;
+      await isar.isarChannels.put(isarChannel);
     });
   } catch (e) {
     // Optionally: Log error per channel
@@ -111,49 +109,6 @@ Future<void> syncAllChannels(Ref ref) async {
   final channels = await isar.isarChannels.where().findAll();
 
   for (final channel in channels) {
-    await ref.read(syncChannelProvider(channel.id).future);
+    await ref.read(syncChannelProvider(channel.id, channel: channel).future);
   }
 }
-
-// @riverpod
-// Future<IsarChannel?> channelWithArticles(Ref ref, Id channelId) async {
-//   final isar = await ref.watch(isarInstanceProvider.future);
-
-//   final channel = await isar.isarChannels
-//       .where()
-//       .idEqualTo(channelId)
-//       .findFirst();
-//   await channel?.articles.load();
-
-//   return channel;
-// }
-
-// @riverpod
-// Future<List<IsarChannel>> channelsByCategory(Ref ref, Id categoryId) async {
-//   final isar = await ref.watch(isarInstanceProvider.future);
-//   final category = await isar.isarCategorys.get(categoryId);
-//   await category?.channels.load();
-//   return category?.channels.toList() ?? [];
-// }
-
-// @riverpod
-// Future<List<ChannelWithUnreadCount>> channelsForCategory(
-//   Ref ref,
-//   int categoryId,
-// ) async {
-//   final isar = await ref.watch(isarInstanceProvider.future);
-//   final category = await isar.isarCategorys.get(categoryId);
-
-//   if (category == null) return [];
-
-//   await category.channels.load();
-
-//   final result = <ChannelWithUnreadCount>[];
-//   for (final channel in category.channels) {
-//     await channel.articles.load();
-//     final unread = channel.articles.where((a) => !a.isRead).length;
-//     result.add(ChannelWithUnreadCount(channel, unread));
-//   }
-
-//   return result;
-// }

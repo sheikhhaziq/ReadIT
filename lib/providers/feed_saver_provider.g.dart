@@ -6,7 +6,7 @@ part of 'feed_saver_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$feedSaverHash() => r'c264242b90e539802db0b57d05fed69e9adadb69';
+String _$feedSaverHash() => r'20ecfdbb3c419fd581db868db053421de3eaeb79';
 
 /// See also [FeedSaver].
 @ProviderFor(FeedSaver)

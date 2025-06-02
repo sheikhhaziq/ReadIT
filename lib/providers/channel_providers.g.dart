@@ -164,7 +164,7 @@ class _ChannelWithUnreadCountProviderElement
   int get channelId => (origin as ChannelWithUnreadCountProvider).channelId;
 }
 
-String _$syncChannelHash() => r'a678e9b22f27b57b7180a0792557937ea47e45dd';
+String _$syncChannelHash() => r'e35b7d60a5d53db3a0eb5ff17f376a61d5c477dd';
 
 /// See also [syncChannel].
 @ProviderFor(syncChannel)
@@ -177,10 +177,12 @@ class SyncChannelFamily extends Family<AsyncValue<void>> {
 
   /// See also [syncChannel].
   SyncChannelProvider call(
-    int channelId,
-  ) {
+    int channelId, {
+    IsarChannel? channel,
+  }) {
     return SyncChannelProvider(
       channelId,
+      channel: channel,
     );
   }
 
@@ -190,6 +192,7 @@ class SyncChannelFamily extends Family<AsyncValue<void>> {
   ) {
     return call(
       provider.channelId,
+      channel: provider.channel,
     );
   }
 
@@ -212,11 +215,13 @@ class SyncChannelFamily extends Family<AsyncValue<void>> {
 class SyncChannelProvider extends AutoDisposeFutureProvider<void> {
   /// See also [syncChannel].
   SyncChannelProvider(
-    int channelId,
-  ) : this._internal(
+    int channelId, {
+    IsarChannel? channel,
+  }) : this._internal(
           (ref) => syncChannel(
             ref as SyncChannelRef,
             channelId,
+            channel: channel,
           ),
           from: syncChannelProvider,
           name: r'syncChannelProvider',
@@ -228,6 +233,7 @@ class SyncChannelProvider extends AutoDisposeFutureProvider<void> {
           allTransitiveDependencies:
               SyncChannelFamily._allTransitiveDependencies,
           channelId: channelId,
+          channel: channel,
         );
 
   SyncChannelProvider._internal(
@@ -238,9 +244,11 @@ class SyncChannelProvider extends AutoDisposeFutureProvider<void> {
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.channelId,
+    required this.channel,
   }) : super.internal();
 
   final int channelId;
+  final IsarChannel? channel;
 
   @override
   Override overrideWith(
@@ -256,6 +264,7 @@ class SyncChannelProvider extends AutoDisposeFutureProvider<void> {
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         channelId: channelId,
+        channel: channel,
       ),
     );
   }
@@ -267,13 +276,16 @@ class SyncChannelProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   bool operator ==(Object other) {
-    return other is SyncChannelProvider && other.channelId == channelId;
+    return other is SyncChannelProvider &&
+        other.channelId == channelId &&
+        other.channel == channel;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, channelId.hashCode);
+    hash = _SystemHash.combine(hash, channel.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -284,6 +296,9 @@ class SyncChannelProvider extends AutoDisposeFutureProvider<void> {
 mixin SyncChannelRef on AutoDisposeFutureProviderRef<void> {
   /// The parameter `channelId` of this provider.
   int get channelId;
+
+  /// The parameter `channel` of this provider.
+  IsarChannel? get channel;
 }
 
 class _SyncChannelProviderElement extends AutoDisposeFutureProviderElement<void>
@@ -292,6 +307,8 @@ class _SyncChannelProviderElement extends AutoDisposeFutureProviderElement<void>
 
   @override
   int get channelId => (origin as SyncChannelProvider).channelId;
+  @override
+  IsarChannel? get channel => (origin as SyncChannelProvider).channel;
 }
 
 String _$syncAllChannelsHash() => r'8705581b76eae9eac493d0134fd6bdad418672e0';

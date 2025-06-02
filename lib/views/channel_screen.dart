@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:readit/providers/channel_providers.dart';
 import 'package:readit/viewmodels/channel_viewmodel.dart';
-import 'package:readit/widgets/add_channel.dart';
 import 'package:readit/widgets/article_tile.dart';
 
 class ChannelScreen extends ConsumerStatefulWidget {
@@ -53,23 +52,25 @@ class _ChannelScreenState extends ConsumerState<ChannelScreen> {
     }
   }
 
+  Future<void> refreshArticles() async {
+    await ref.read(syncChannelProvider(widget.channelId).future);
+    await ref
+        .read(channelViewmodelProvider(widget.channelId).notifier)
+        .refresh();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: [ChannelRefresh(channelId: widget.channelId)],
-      ),
+      appBar: AppBar(title: Text(widget.title)),
 
       body: ref
           .watch(channelViewmodelProvider(widget.channelId))
           .when(
             data: (articles) {
               return RefreshIndicator(
-                onRefresh: ref
-                    .read(channelViewmodelProvider(widget.channelId).notifier)
-                    .refresh,
+                onRefresh: refreshArticles,
                 child: ListView.separated(
                   controller: _scrollController,
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -78,7 +79,7 @@ class _ChannelScreenState extends ConsumerState<ChannelScreen> {
                   itemBuilder: (context, index) {
                     final article = articles[index];
                     return ArticleTile(
-                      article: article,
+                      articleWithChannel: article,
                       onTap: (article) async {
                         if (!article.isRead) {
                           await ref
@@ -98,59 +99,6 @@ class _ChannelScreenState extends ConsumerState<ChannelScreen> {
             error: (e, s) => Center(child: Text(e.toString())),
             loading: () => Center(child: CircularProgressIndicator()),
           ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(context: context, builder: (context) => AddChannel());
-        },
-        child: Icon(Icons.add),
-      ),
-    );
-  }
-}
-
-class ChannelRefresh extends ConsumerStatefulWidget {
-  const ChannelRefresh({super.key, required this.channelId});
-
-  final Id channelId;
-
-  @override
-  ConsumerState<ChannelRefresh> createState() => _ChannelRefreshState();
-}
-
-class _ChannelRefreshState extends ConsumerState<ChannelRefresh> {
-  bool _refreshing = false;
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8),
-      child: IconButton(
-        onPressed: () async {
-          setState(() {
-            _refreshing = true;
-          });
-          await ref.read(syncChannelProvider(widget.channelId).future);
-          await ref
-              .read(channelViewmodelProvider(widget.channelId).notifier)
-              .refresh();
-          setState(() {
-            _refreshing = false;
-          });
-        },
-        iconSize: 25,
-        icon: _refreshing
-            ? SizedBox(
-                height: 20,
-                width: 20,
-                child: CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  strokeWidth: 3,
-                ),
-              )
-            : Icon(
-                Icons.refresh,
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
-              ),
-      ),
     );
   }
 }
