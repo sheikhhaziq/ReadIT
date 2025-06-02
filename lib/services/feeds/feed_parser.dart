@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:readit/services/feeds/models/channel.dart';
+import 'package:readit/services/feeds/readibility.dart';
 import 'package:xml/xml.dart';
 import 'package:readit/services/feeds/models/feed.dart';
 import 'package:http/http.dart' as http;
@@ -377,5 +378,15 @@ class FeedParser {
       feeds: items,
       lastBuildDate: _tryParseDate(lastBuildDate),
     );
+  }
+
+  static Future<String> getArticleContentFromUrl(String url) async {
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode != 200) {
+      throw Exception('Failed to load page');
+    }
+
+    final result = ReadableHtmlConverter.convertToReadableHtml(response.body);
+    return result;
   }
 }

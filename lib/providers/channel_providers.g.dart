@@ -311,7 +311,7 @@ class _SyncChannelProviderElement extends AutoDisposeFutureProviderElement<void>
   IsarChannel? get channel => (origin as SyncChannelProvider).channel;
 }
 
-String _$syncAllChannelsHash() => r'8705581b76eae9eac493d0134fd6bdad418672e0';
+String _$syncAllChannelsHash() => r'017ebb01a764b0f276f505e0eab6663ff36af681';
 
 /// See also [syncAllChannels].
 @ProviderFor(syncAllChannels)
