@@ -8,11 +8,21 @@ import 'isar_provider.dart';
 part 'article_providers.g.dart';
 
 @riverpod
-Future<List<IsarArticle>> articlesByChannel(Ref ref, Id channelId) async {
+Future<List<IsarArticle>> articlesByChannel(
+  Ref ref,
+  Id channelId,
+  int offset,
+  int limit,
+) async {
   final isar = await ref.watch(isarInstanceProvider.future);
-  final channel = await isar.isarChannels.get(channelId);
-  await channel?.articles.load();
-  return channel?.articles.toList() ?? [];
+
+  return isar.isarArticles
+      .filter()
+      .channel((q) => q.idEqualTo(channelId))
+      .sortByPublishedDesc()
+      .offset(offset)
+      .limit(limit)
+      .findAll();
 }
 
 @riverpod

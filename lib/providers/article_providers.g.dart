@@ -6,7 +6,7 @@ part of 'article_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$articlesByChannelHash() => r'109edcc83b74526c48ea1339cc2c75d43acacb4c';
+String _$articlesByChannelHash() => r'05f5c29bcd45e34634b3c7c33943546e15e79056';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -41,9 +41,13 @@ class ArticlesByChannelFamily extends Family<AsyncValue<List<IsarArticle>>> {
   /// See also [articlesByChannel].
   ArticlesByChannelProvider call(
     int channelId,
+    int offset,
+    int limit,
   ) {
     return ArticlesByChannelProvider(
       channelId,
+      offset,
+      limit,
     );
   }
 
@@ -53,6 +57,8 @@ class ArticlesByChannelFamily extends Family<AsyncValue<List<IsarArticle>>> {
   ) {
     return call(
       provider.channelId,
+      provider.offset,
+      provider.limit,
     );
   }
 
@@ -77,10 +83,14 @@ class ArticlesByChannelProvider
   /// See also [articlesByChannel].
   ArticlesByChannelProvider(
     int channelId,
+    int offset,
+    int limit,
   ) : this._internal(
           (ref) => articlesByChannel(
             ref as ArticlesByChannelRef,
             channelId,
+            offset,
+            limit,
           ),
           from: articlesByChannelProvider,
           name: r'articlesByChannelProvider',
@@ -92,6 +102,8 @@ class ArticlesByChannelProvider
           allTransitiveDependencies:
               ArticlesByChannelFamily._allTransitiveDependencies,
           channelId: channelId,
+          offset: offset,
+          limit: limit,
         );
 
   ArticlesByChannelProvider._internal(
@@ -102,9 +114,13 @@ class ArticlesByChannelProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.channelId,
+    required this.offset,
+    required this.limit,
   }) : super.internal();
 
   final int channelId;
+  final int offset;
+  final int limit;
 
   @override
   Override overrideWith(
@@ -120,6 +136,8 @@ class ArticlesByChannelProvider
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         channelId: channelId,
+        offset: offset,
+        limit: limit,
       ),
     );
   }
@@ -131,13 +149,18 @@ class ArticlesByChannelProvider
 
   @override
   bool operator ==(Object other) {
-    return other is ArticlesByChannelProvider && other.channelId == channelId;
+    return other is ArticlesByChannelProvider &&
+        other.channelId == channelId &&
+        other.offset == offset &&
+        other.limit == limit;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, channelId.hashCode);
+    hash = _SystemHash.combine(hash, offset.hashCode);
+    hash = _SystemHash.combine(hash, limit.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -148,6 +171,12 @@ class ArticlesByChannelProvider
 mixin ArticlesByChannelRef on AutoDisposeFutureProviderRef<List<IsarArticle>> {
   /// The parameter `channelId` of this provider.
   int get channelId;
+
+  /// The parameter `offset` of this provider.
+  int get offset;
+
+  /// The parameter `limit` of this provider.
+  int get limit;
 }
 
 class _ArticlesByChannelProviderElement
@@ -157,6 +186,10 @@ class _ArticlesByChannelProviderElement
 
   @override
   int get channelId => (origin as ArticlesByChannelProvider).channelId;
+  @override
+  int get offset => (origin as ArticlesByChannelProvider).offset;
+  @override
+  int get limit => (origin as ArticlesByChannelProvider).limit;
 }
 
 String _$markReadArticleHash() => r'cb6d5935daca674e9d14733d38a40e2374de97ba';

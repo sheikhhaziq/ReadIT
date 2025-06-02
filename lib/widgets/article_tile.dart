@@ -2,25 +2,18 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:readit/models/article.dart';
-import 'package:readit/models/article_with_channel.dart';
-import 'package:readit/widgets/dynamic_network_image.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 
 class ArticleTile extends ConsumerWidget {
-  const ArticleTile({
-    super.key,
-    required this.articleWithChannel,
-    required this.onTap,
-  });
+  const ArticleTile({super.key, required this.article, required this.onTap});
 
-  final ArticleWithChannel articleWithChannel;
+  final IsarArticle article;
 
   final void Function(IsarArticle article) onTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final article = articleWithChannel.article;
     return InkWell(
       borderRadius: BorderRadius.circular(8),
       onTap: () async {
@@ -34,59 +27,8 @@ class ArticleTile extends ConsumerWidget {
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 30,
-                      height: 30,
-                      child:
-                          (articleWithChannel.channelImage != null ||
-                              articleWithChannel.channelTitle != null)
-                          ? CircleAvatar(
-                              radius: 30,
-                              child: articleWithChannel.channelImage != null
-                                  ? ClipRRect(
-                                      borderRadius:
-                                          BorderRadiusGeometry.circular(15),
-                                      child: DynamicNetworkImage(
-                                        articleWithChannel.channelImage!,
-                                        height: 30,
-                                        width: 30,
-                                      ),
-                                    )
-                                  : Text(
-                                      articleWithChannel.channelTitle!
-                                          .split(" ")
-                                          .map((e) => e[0])
-                                          .join(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall
-                                          ?.copyWith(
-                                            color: article.isRead
-                                                ? Theme.of(context).hintColor
-                                                : null,
-                                          ),
-                                    ),
-                            )
-                          : null,
-                    ),
-                    if (articleWithChannel.channelTitle != null)
-                      SizedBox(width: 8),
-                    if (articleWithChannel.channelTitle != null)
-                      Text(
-                        articleWithChannel.channelTitle!,
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: article.isRead
-                              ? Theme.of(context).hintColor
-                              : Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                  ],
-                ),
-
                 if (article.published != null)
                   Text(
                     timeago.format(article.published!),

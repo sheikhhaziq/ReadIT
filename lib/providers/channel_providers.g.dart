@@ -163,5 +163,153 @@ class _ChannelWithUnreadCountProviderElement
   @override
   int get channelId => (origin as ChannelWithUnreadCountProvider).channelId;
 }
+
+String _$syncChannelHash() => r'fa3b02153c83b41c5ea5e20bbfedbed45e5d2a39';
+
+/// See also [syncChannel].
+@ProviderFor(syncChannel)
+const syncChannelProvider = SyncChannelFamily();
+
+/// See also [syncChannel].
+class SyncChannelFamily extends Family<AsyncValue<void>> {
+  /// See also [syncChannel].
+  const SyncChannelFamily();
+
+  /// See also [syncChannel].
+  SyncChannelProvider call(
+    int channelId,
+  ) {
+    return SyncChannelProvider(
+      channelId,
+    );
+  }
+
+  @override
+  SyncChannelProvider getProviderOverride(
+    covariant SyncChannelProvider provider,
+  ) {
+    return call(
+      provider.channelId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'syncChannelProvider';
+}
+
+/// See also [syncChannel].
+class SyncChannelProvider extends AutoDisposeFutureProvider<void> {
+  /// See also [syncChannel].
+  SyncChannelProvider(
+    int channelId,
+  ) : this._internal(
+          (ref) => syncChannel(
+            ref as SyncChannelRef,
+            channelId,
+          ),
+          from: syncChannelProvider,
+          name: r'syncChannelProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$syncChannelHash,
+          dependencies: SyncChannelFamily._dependencies,
+          allTransitiveDependencies:
+              SyncChannelFamily._allTransitiveDependencies,
+          channelId: channelId,
+        );
+
+  SyncChannelProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.channelId,
+  }) : super.internal();
+
+  final int channelId;
+
+  @override
+  Override overrideWith(
+    FutureOr<void> Function(SyncChannelRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: SyncChannelProvider._internal(
+        (ref) => create(ref as SyncChannelRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        channelId: channelId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<void> createElement() {
+    return _SyncChannelProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SyncChannelProvider && other.channelId == channelId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, channelId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin SyncChannelRef on AutoDisposeFutureProviderRef<void> {
+  /// The parameter `channelId` of this provider.
+  int get channelId;
+}
+
+class _SyncChannelProviderElement extends AutoDisposeFutureProviderElement<void>
+    with SyncChannelRef {
+  _SyncChannelProviderElement(super.provider);
+
+  @override
+  int get channelId => (origin as SyncChannelProvider).channelId;
+}
+
+String _$syncAllChannelsHash() => r'30122a8152c36cb1dbd527298b39cec37db2b6b6';
+
+/// See also [syncAllChannels].
+@ProviderFor(syncAllChannels)
+final syncAllChannelsProvider = AutoDisposeFutureProvider<void>.internal(
+  syncAllChannels,
+  name: r'syncAllChannelsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$syncAllChannelsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef SyncAllChannelsRef = AutoDisposeFutureProviderRef<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

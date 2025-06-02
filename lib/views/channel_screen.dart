@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:readit/viewmodels/home_viewmodel.dart';
-import 'package:readit/views/home_screen/custom_drawer.dart';
+import 'package:isar/isar.dart';
+import 'package:readit/providers/channel_providers.dart';
+import 'package:readit/viewmodels/channel_viewmodel.dart';
 import 'package:readit/widgets/add_channel.dart';
-import 'package:readit/widgets/article_with_channel_tile.dart';
+import 'package:readit/widgets/article_tile.dart';
 
-class HomeScreen extends ConsumerStatefulWidget {
-  const HomeScreen({super.key});
+class ChannelScreen extends ConsumerStatefulWidget {
+  const ChannelScreen({
+    super.key,
+    required this.channelId,
+    required this.title,
+  });
+  final Id channelId;
+  final String title;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _HomeScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _ChannelScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> {
+class _ChannelScreenState extends ConsumerState<ChannelScreen> {
   late ScrollController _scrollController;
   bool loadingMore = false;
 
@@ -38,7 +45,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             _scrollController.position.maxScrollExtent - 200 &&
         !loadingMore) {
       setState(() => loadingMore = true);
-      ref.read(homeViewModelProvider.notifier).loadMore();
+      await ref
+          .read(channelViewmodelProvider(widget.channelId).notifier)
+          .loadMore();
 
       setState(() => loadingMore = false);
     }
@@ -48,28 +57,46 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      appBar: AppBar(title: Text("All Feeds")),
-      drawer: CustomDrawer(),
+      appBar: AppBar(
+        title: Text(widget.title),
+        actions: [
+          IconButton.filledTonal(
+            onPressed: () async {
+              await ref.read(syncChannelProvider(widget.channelId).future);
+              await ref
+                  .read(channelViewmodelProvider(widget.channelId).notifier)
+                  .refresh();
+            },
+            icon: Icon(Icons.refresh),
+          ),
+        ],
+      ),
 
       body: ref
-          .watch(homeViewModelProvider)
+          .watch(channelViewmodelProvider(widget.channelId))
           .when(
             data: (articles) {
               return RefreshIndicator(
-                onRefresh: ref.read(homeViewModelProvider.notifier).refresh,
+                onRefresh: ref
+                    .read(channelViewmodelProvider(widget.channelId).notifier)
+                    .refresh,
                 child: ListView.separated(
                   controller: _scrollController,
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   itemCount: articles.length,
                   separatorBuilder: (context, index) => SizedBox(height: 8),
                   itemBuilder: (context, index) {
-                    final articleWithChannel = articles[index];
-                    return ArticleWithChannelTile(
-                      articleWithChannel: articleWithChannel,
+                    final article = articles[index];
+                    return ArticleTile(
+                      article: article,
                       onTap: (article) async {
                         if (!article.isRead) {
                           await ref
-                              .read(homeViewModelProvider.notifier)
+                              .read(
+                                channelViewmodelProvider(
+                                  widget.channelId,
+                                ).notifier,
+                              )
                               .markArticleAsRead(article.id);
                         }
                       },
