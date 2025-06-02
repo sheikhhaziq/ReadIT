@@ -68,16 +68,18 @@ class FeedParser {
   }
 
   /// Get Channel and its feeds from xml [String]
-  static Channel? parseFromString(String xmlString) {
+  static Channel? _parseFromString(List source) {
+    String feedUrl = source[0];
+    String xmlString = source[1];
     final doc = XmlDocument.parse(xmlString);
     final root = doc.rootElement;
 
     if (root.name.local == 'rss') {
-      return _parseRss2(doc);
+      return _parseRss2(doc, feedUrl);
     } else if (root.name.local == 'RDF') {
-      return _parseRss1(doc);
+      return _parseRss1(doc, feedUrl);
     } else if (root.name.local == 'feed') {
-      return _parseAtom(doc);
+      return _parseAtom(doc, feedUrl);
     } else {
       return null;
     }
@@ -90,13 +92,13 @@ class FeedParser {
       if (response.statusCode != 200) {
         return null;
       }
-      return await compute(parseFromString, response.body);
+      return await compute(_parseFromString, [url, response.body]);
     } catch (e) {
       return null;
     }
   }
 
-  static Channel? _parseRss2(XmlDocument doc) {
+  static Channel? _parseRss2(XmlDocument doc, String feedurl) {
     final channel = doc.findAllElements('channel').firstOrNull;
     if (channel == null) return null;
     final title = channel.getElement('title')?.innerText ?? '';
@@ -115,6 +117,7 @@ class FeedParser {
     final language = channel
         .getElement('language', namespace: _dcNS)
         ?.innerText;
+    final lastBuildDate = channel.getElement('lastBuildDate')?.innerText;
 
     final items = channel.findAllElements('item').map((item) {
       final enclosure = item.getElement('enclosure');
@@ -174,6 +177,7 @@ class FeedParser {
 
     return Channel(
       title: title.trim(),
+      feedUrl: feedurl,
       link: link.trim(),
       description: description.trim(),
       image: image?.trim(),
@@ -182,10 +186,11 @@ class FeedParser {
       rights: rights,
       language: language,
       feeds: items,
+      lastBuildDate: _tryParseDate(lastBuildDate),
     );
   }
 
-  static Channel? _parseRss1(XmlDocument doc) {
+  static Channel? _parseRss1(XmlDocument doc, String feedUrl) {
     final channel = doc.findAllElements('channel').firstOrNull;
     if (channel == null) return null;
     final title = channel.getElement('title')?.innerText ?? '';
@@ -199,6 +204,7 @@ class FeedParser {
     final language = channel
         .getElement('language', namespace: _dcNS)
         ?.innerText;
+    final lastBuildDate = channel.getElement('lastBuildDate')?.innerText;
 
     final items = doc.findAllElements('item').map((item) {
       final pubDate = item.getElement('date', namespace: _dcNS)?.innerText;
@@ -228,6 +234,7 @@ class FeedParser {
 
     return Channel(
       title: title.trim(),
+      feedUrl: feedUrl,
       link: link.trim(),
       description: description.trim(),
       creator: creator,
@@ -235,16 +242,18 @@ class FeedParser {
       rights: rights,
       language: language,
       feeds: items,
+      lastBuildDate: _tryParseDate(lastBuildDate),
     );
   }
 
-  static Channel _parseAtom(XmlDocument doc) {
+  static Channel? _parseAtom(XmlDocument doc, String feedurl) {
     final feedElement = doc.getElement('feed');
+    if (feedElement == null) return null;
     final title =
-        feedElement?.getElement('title', namespace: _atomNS)?.innerText ?? '';
+        feedElement.getElement('title', namespace: _atomNS)?.innerText ?? '';
     final link =
         feedElement
-            ?.findElements('link', namespace: _atomNS)
+            .findElements('link', namespace: _atomNS)
             .firstWhere(
               (e) => e.getAttribute('rel') != 'self',
               orElse: () => XmlElement(XmlName('')),
@@ -252,20 +261,20 @@ class FeedParser {
             .getAttribute('href') ??
         '';
     final description =
-        feedElement?.getElement('subtitle', namespace: _atomNS)?.innerText ??
-        '';
+        feedElement.getElement('subtitle', namespace: _atomNS)?.innerText ?? '';
     final creator = feedElement
-        ?.getElement('creator', namespace: _dcNS)
+        .getElement('creator', namespace: _dcNS)
         ?.innerText;
     final publisher = feedElement
-        ?.getElement('publisher', namespace: _dcNS)
+        .getElement('publisher', namespace: _dcNS)
         ?.innerText;
     final rights = feedElement
-        ?.getElement('rights', namespace: _dcNS)
+        .getElement('rights', namespace: _dcNS)
         ?.innerText;
     final language = feedElement
-        ?.getElement('language', namespace: _dcNS)
+        .getElement('language', namespace: _dcNS)
         ?.innerText;
+    final lastBuildDate = feedElement.getElement('lastBuildDate')?.innerText;
 
     final items = doc.findAllElements('entry', namespace: _atomNS).map((entry) {
       // Try multiple strategies to find image
@@ -358,6 +367,7 @@ class FeedParser {
 
     return Channel(
       title: title.trim(),
+      feedUrl: feedurl,
       link: link.trim(),
       description: description.trim(),
       creator: creator,
@@ -365,6 +375,7 @@ class FeedParser {
       rights: rights,
       language: language,
       feeds: items,
+      lastBuildDate: _tryParseDate(lastBuildDate),
     );
   }
 }

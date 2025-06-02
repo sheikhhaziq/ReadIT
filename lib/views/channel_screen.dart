@@ -59,17 +59,7 @@ class _ChannelScreenState extends ConsumerState<ChannelScreen> {
       extendBody: true,
       appBar: AppBar(
         title: Text(widget.title),
-        actions: [
-          IconButton.filledTonal(
-            onPressed: () async {
-              await ref.read(syncChannelProvider(widget.channelId).future);
-              await ref
-                  .read(channelViewmodelProvider(widget.channelId).notifier)
-                  .refresh();
-            },
-            icon: Icon(Icons.refresh),
-          ),
-        ],
+        actions: [ChannelRefresh(channelId: widget.channelId)],
       ),
 
       body: ref
@@ -113,6 +103,53 @@ class _ChannelScreenState extends ConsumerState<ChannelScreen> {
           showDialog(context: context, builder: (context) => AddChannel());
         },
         child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+class ChannelRefresh extends ConsumerStatefulWidget {
+  const ChannelRefresh({super.key, required this.channelId});
+
+  final Id channelId;
+
+  @override
+  ConsumerState<ChannelRefresh> createState() => _ChannelRefreshState();
+}
+
+class _ChannelRefreshState extends ConsumerState<ChannelRefresh> {
+  bool _refreshing = false;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: IconButton(
+        onPressed: () async {
+          setState(() {
+            _refreshing = true;
+          });
+          await ref.read(syncChannelProvider(widget.channelId).future);
+          await ref
+              .read(channelViewmodelProvider(widget.channelId).notifier)
+              .refresh();
+          setState(() {
+            _refreshing = false;
+          });
+        },
+        iconSize: 25,
+        icon: _refreshing
+            ? SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  strokeWidth: 3,
+                ),
+              )
+            : Icon(
+                Icons.refresh,
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
+              ),
       ),
     );
   }

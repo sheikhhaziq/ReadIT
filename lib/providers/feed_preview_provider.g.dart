@@ -6,7 +6,7 @@ part of 'feed_preview_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$feedPreviewHash() => r'bcd9b15a0945054238cddd079a79a450febb3366';
+String _$feedPreviewHash() => r'9de099283e055b703a9b474c4c2d46fb3984355c';
 
 /// See also [FeedPreview].
 @ProviderFor(FeedPreview)

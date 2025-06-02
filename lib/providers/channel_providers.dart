@@ -43,16 +43,21 @@ Future<void> syncChannel(Ref ref, Id channelId) async {
       .where()
       .idEqualTo(channelId)
       .findFirst();
+
   if (channel == null) {
     return;
   }
 
-  if (channel.link == null) return;
-
   try {
-    await ref.read(feedPreviewProvider.notifier).load(channel.link!);
-    final parsed = await ref.read(feedPreviewProvider.future);
+    final parsed = await ref
+        .read(feedPreviewProvider.notifier)
+        .getFeed(channel.feedUrl);
+
     if (parsed == null) {
+      return;
+    }
+    if (parsed.lastBuildDate != null &&
+        parsed.lastBuildDate == channel.lastBuildDate) {
       return;
     }
     final existingGuids = await isar.isarArticles
@@ -65,6 +70,7 @@ Future<void> syncChannel(Ref ref, Id channelId) async {
     final newArticles = parsed.feeds.where((article) {
       return article.guid != null && !existingGuids.contains(article.guid);
     });
+    if (newArticles.isEmpty) return;
 
     await isar.writeTxn(() async {
       final isarArticles = newArticles.map((a) {
@@ -91,6 +97,7 @@ Future<void> syncChannel(Ref ref, Id channelId) async {
       }
 
       channel.lastUpdated = DateTime.now();
+      channel.lastBuildDate = parsed.lastBuildDate;
       await isar.isarChannels.put(channel);
     });
   } catch (e) {

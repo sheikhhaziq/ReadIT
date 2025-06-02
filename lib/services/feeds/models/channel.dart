@@ -2,6 +2,7 @@ import 'package:readit/services/feeds/models/feed.dart';
 
 class Channel {
   final String title;
+  final String feedUrl;
   final String link;
   final String description;
   final String? image;
@@ -9,10 +10,13 @@ class Channel {
   final String? publisher;
   final String? rights;
   final String? language;
+  final DateTime? lastBuildDate;
+
   List<FeedItem> feeds;
 
   Channel({
     required this.title,
+    required this.feedUrl,
     required this.link,
     required this.description,
     this.feeds = const [],
@@ -21,6 +25,7 @@ class Channel {
     this.publisher,
     this.rights,
     this.language,
+    this.lastBuildDate,
   });
 
   @override
@@ -32,6 +37,7 @@ class Channel {
   Map<String, dynamic> toMap() {
     return {
       'title': title,
+      'feedUrl': feedUrl,
       'link': link,
       'description': description,
       'image': image,
@@ -40,6 +46,7 @@ class Channel {
       'publisher': publisher,
       'language': language,
       'rights': rights,
+      'lastBuildDate': lastBuildDate,
     };
   }
 }

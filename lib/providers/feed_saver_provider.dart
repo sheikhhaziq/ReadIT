@@ -19,6 +19,7 @@ class FeedSaver extends _$FeedSaver {
       // Create the channel
       final isarChannel = IsarChannel()
         ..title = channel.title
+        ..feedUrl = channel.feedUrl
         ..link = channel.link
         ..description = channel.description
         ..image = channel.image
@@ -26,7 +27,8 @@ class FeedSaver extends _$FeedSaver {
         ..publisher = channel.publisher
         ..rights = channel.rights
         ..language = channel.language
-        ..category.value = category;
+        ..category.value = category
+        ..lastBuildDate = channel.lastBuildDate;
 
       // Save the channel first so it gets an ID
       await isar.isarChannels.put(isarChannel);

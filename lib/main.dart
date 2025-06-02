@@ -23,6 +23,9 @@ class MyApp extends StatelessWidget {
               seedColor: systemAccent.accent,
               brightness: Brightness.light,
             ),
+            useSystemColors: true,
+            useMaterial3: true,
+            visualDensity: VisualDensity.comfortable,
           ),
           darkTheme: ThemeData(
             brightness: Brightness.dark,
@@ -30,6 +33,9 @@ class MyApp extends StatelessWidget {
               seedColor: systemAccent.accent,
               brightness: Brightness.dark,
             ),
+            useSystemColors: true,
+            useMaterial3: true,
+            visualDensity: VisualDensity.comfortable,
           ),
           home: const HomeScreen(),
         );

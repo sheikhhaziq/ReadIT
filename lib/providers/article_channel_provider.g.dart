@@ -7,7 +7,7 @@ part of 'article_channel_provider.dart';
 // **************************************************************************
 
 String _$articleWithChannelPageHash() =>
-    r'66e8d309c059368aaf6b3612c741a573f0398fad';
+    r'c41b434e085d09c3e863920d4b7153648ead08f5';
 
 /// Copied from Dart SDK
 class _SystemHash {

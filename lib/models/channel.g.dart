@@ -27,38 +27,48 @@ const IsarChannelSchema = CollectionSchema(
       name: r'description',
       type: IsarType.string,
     ),
-    r'image': PropertySchema(
+    r'feedUrl': PropertySchema(
       id: 2,
+      name: r'feedUrl',
+      type: IsarType.string,
+    ),
+    r'image': PropertySchema(
+      id: 3,
       name: r'image',
       type: IsarType.string,
     ),
     r'language': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'language',
       type: IsarType.string,
     ),
+    r'lastBuildDate': PropertySchema(
+      id: 5,
+      name: r'lastBuildDate',
+      type: IsarType.dateTime,
+    ),
     r'lastUpdated': PropertySchema(
-      id: 4,
+      id: 6,
       name: r'lastUpdated',
       type: IsarType.dateTime,
     ),
     r'link': PropertySchema(
-      id: 5,
+      id: 7,
       name: r'link',
       type: IsarType.string,
     ),
     r'publisher': PropertySchema(
-      id: 6,
+      id: 8,
       name: r'publisher',
       type: IsarType.string,
     ),
     r'rights': PropertySchema(
-      id: 7,
+      id: 9,
       name: r'rights',
       type: IsarType.string,
     ),
     r'title': PropertySchema(
-      id: 8,
+      id: 10,
       name: r'title',
       type: IsarType.string,
     )
@@ -108,6 +118,7 @@ int _isarChannelEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  bytesCount += 3 + object.feedUrl.length * 3;
   {
     final value = object.image;
     if (value != null) {
@@ -150,13 +161,15 @@ void _isarChannelSerialize(
 ) {
   writer.writeString(offsets[0], object.creator);
   writer.writeString(offsets[1], object.description);
-  writer.writeString(offsets[2], object.image);
-  writer.writeString(offsets[3], object.language);
-  writer.writeDateTime(offsets[4], object.lastUpdated);
-  writer.writeString(offsets[5], object.link);
-  writer.writeString(offsets[6], object.publisher);
-  writer.writeString(offsets[7], object.rights);
-  writer.writeString(offsets[8], object.title);
+  writer.writeString(offsets[2], object.feedUrl);
+  writer.writeString(offsets[3], object.image);
+  writer.writeString(offsets[4], object.language);
+  writer.writeDateTime(offsets[5], object.lastBuildDate);
+  writer.writeDateTime(offsets[6], object.lastUpdated);
+  writer.writeString(offsets[7], object.link);
+  writer.writeString(offsets[8], object.publisher);
+  writer.writeString(offsets[9], object.rights);
+  writer.writeString(offsets[10], object.title);
 }
 
 IsarChannel _isarChannelDeserialize(
@@ -168,14 +181,16 @@ IsarChannel _isarChannelDeserialize(
   final object = IsarChannel();
   object.creator = reader.readStringOrNull(offsets[0]);
   object.description = reader.readStringOrNull(offsets[1]);
+  object.feedUrl = reader.readString(offsets[2]);
   object.id = id;
-  object.image = reader.readStringOrNull(offsets[2]);
-  object.language = reader.readStringOrNull(offsets[3]);
-  object.lastUpdated = reader.readDateTime(offsets[4]);
-  object.link = reader.readStringOrNull(offsets[5]);
-  object.publisher = reader.readStringOrNull(offsets[6]);
-  object.rights = reader.readStringOrNull(offsets[7]);
-  object.title = reader.readString(offsets[8]);
+  object.image = reader.readStringOrNull(offsets[3]);
+  object.language = reader.readStringOrNull(offsets[4]);
+  object.lastBuildDate = reader.readDateTimeOrNull(offsets[5]);
+  object.lastUpdated = reader.readDateTime(offsets[6]);
+  object.link = reader.readStringOrNull(offsets[7]);
+  object.publisher = reader.readStringOrNull(offsets[8]);
+  object.rights = reader.readStringOrNull(offsets[9]);
+  object.title = reader.readString(offsets[10]);
   return object;
 }
 
@@ -191,18 +206,22 @@ P _isarChannelDeserializeProp<P>(
     case 1:
       return (reader.readStringOrNull(offset)) as P;
     case 2:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 3:
       return (reader.readStringOrNull(offset)) as P;
     case 4:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 5:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 6:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 7:
       return (reader.readStringOrNull(offset)) as P;
     case 8:
+      return (reader.readStringOrNull(offset)) as P;
+    case 9:
+      return (reader.readStringOrNull(offset)) as P;
+    case 10:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -612,6 +631,140 @@ extension IsarChannelQueryFilter
     });
   }
 
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> feedUrlEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'feedUrl',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      feedUrlGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'feedUrl',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> feedUrlLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'feedUrl',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> feedUrlBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'feedUrl',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      feedUrlStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'feedUrl',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> feedUrlEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'feedUrl',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> feedUrlContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'feedUrl',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> feedUrlMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'feedUrl',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      feedUrlIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'feedUrl',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      feedUrlIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'feedUrl',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition> idEqualTo(
       Id value) {
     return QueryBuilder.apply(this, (query) {
@@ -963,6 +1116,80 @@ extension IsarChannelQueryFilter
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'language',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      lastBuildDateIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'lastBuildDate',
+      ));
+    });
+  }
+
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      lastBuildDateIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'lastBuildDate',
+      ));
+    });
+  }
+
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      lastBuildDateEqualTo(DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'lastBuildDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      lastBuildDateGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'lastBuildDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      lastBuildDateLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'lastBuildDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<IsarChannel, IsarChannel, QAfterFilterCondition>
+      lastBuildDateBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'lastBuildDate',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }
@@ -1716,6 +1943,18 @@ extension IsarChannelQuerySortBy
     });
   }
 
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> sortByFeedUrl() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'feedUrl', Sort.asc);
+    });
+  }
+
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> sortByFeedUrlDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'feedUrl', Sort.desc);
+    });
+  }
+
   QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> sortByImage() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'image', Sort.asc);
@@ -1737,6 +1976,19 @@ extension IsarChannelQuerySortBy
   QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> sortByLanguageDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'language', Sort.desc);
+    });
+  }
+
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> sortByLastBuildDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastBuildDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy>
+      sortByLastBuildDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastBuildDate', Sort.desc);
     });
   }
 
@@ -1827,6 +2079,18 @@ extension IsarChannelQuerySortThenBy
     });
   }
 
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenByFeedUrl() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'feedUrl', Sort.asc);
+    });
+  }
+
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenByFeedUrlDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'feedUrl', Sort.desc);
+    });
+  }
+
   QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -1860,6 +2124,19 @@ extension IsarChannelQuerySortThenBy
   QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenByLanguageDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'language', Sort.desc);
+    });
+  }
+
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy> thenByLastBuildDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastBuildDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<IsarChannel, IsarChannel, QAfterSortBy>
+      thenByLastBuildDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastBuildDate', Sort.desc);
     });
   }
 
@@ -1940,6 +2217,13 @@ extension IsarChannelQueryWhereDistinct
     });
   }
 
+  QueryBuilder<IsarChannel, IsarChannel, QDistinct> distinctByFeedUrl(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'feedUrl', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<IsarChannel, IsarChannel, QDistinct> distinctByImage(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1951,6 +2235,12 @@ extension IsarChannelQueryWhereDistinct
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'language', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<IsarChannel, IsarChannel, QDistinct> distinctByLastBuildDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'lastBuildDate');
     });
   }
 
@@ -2009,6 +2299,12 @@ extension IsarChannelQueryProperty
     });
   }
 
+  QueryBuilder<IsarChannel, String, QQueryOperations> feedUrlProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'feedUrl');
+    });
+  }
+
   QueryBuilder<IsarChannel, String?, QQueryOperations> imageProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'image');
@@ -2018,6 +2314,13 @@ extension IsarChannelQueryProperty
   QueryBuilder<IsarChannel, String?, QQueryOperations> languageProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'language');
+    });
+  }
+
+  QueryBuilder<IsarChannel, DateTime?, QQueryOperations>
+      lastBuildDateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'lastBuildDate');
     });
   }
 

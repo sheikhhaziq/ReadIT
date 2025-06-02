@@ -80,7 +80,7 @@ class ArticleWithChannelTile extends ConsumerWidget {
                       if (articleWithChannel.channelTitle != null)
                         Text(
                           articleWithChannel.channelTitle!,
-                          style: Theme.of(context).textTheme.labelSmall
+                          style: Theme.of(context).textTheme.labelMedium
                               ?.copyWith(
                                 color: article.isRead
                                     ? Theme.of(context).hintColor
@@ -108,6 +108,19 @@ class ArticleWithChannelTile extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      if (article.image != null)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: CachedNetworkImage(
+                              imageUrl: article.image!,
+                              width: double.infinity,
+                              // height: 70,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
                       Text(
                         article.title,
                         maxLines: 2,
@@ -125,7 +138,7 @@ class ArticleWithChannelTile extends ConsumerWidget {
                           article.description!,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodyMedium
+                          style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(
                                 height: 1.1,
                                 color: article.isRead
@@ -136,19 +149,6 @@ class ArticleWithChannelTile extends ConsumerWidget {
                     ],
                   ),
                 ),
-                if (article.image != null)
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: CachedNetworkImage(
-                        imageUrl: article.image!,
-                        width: 70,
-                        height: 70,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
               ],
             ),
           ],

@@ -8,4 +8,9 @@ part 'isar_provider.g.dart';
 @Riverpod(keepAlive: true)
 Future<Isar> isarInstance(Ref ref) async {
   return getIsarInstance();
+  // final isar = await getIsarInstance();
+  // isar.writeTxn(() async {
+  //   await isar.clear();
+  // });
+  // return isar;
 }

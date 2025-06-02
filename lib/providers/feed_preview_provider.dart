@@ -1,6 +1,6 @@
+import 'package:readit/services/feeds/feed_parser.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../services/feeds/models/channel.dart';
-import '../services/feed_preview_service.dart';
 
 part 'feed_preview_provider.g.dart';
 
@@ -10,10 +10,14 @@ class FeedPreview extends _$FeedPreview {
   FutureOr<Channel?> build() => null;
 
   Future<void> load(String url) async {
-    final service = FeedPreviewService();
     state = const AsyncLoading();
-    final result = await service.previewFeed(url);
+    final result = await FeedParser.parseFromUrl(url);
     state = AsyncData(result);
+  }
+
+  Future<Channel?> getFeed(String url) async {
+    final result = await FeedParser.parseFromUrl(url);
+    return result;
   }
 
   void clear() => state = const AsyncData(null);

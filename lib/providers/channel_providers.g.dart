@@ -164,7 +164,7 @@ class _ChannelWithUnreadCountProviderElement
   int get channelId => (origin as ChannelWithUnreadCountProvider).channelId;
 }
 
-String _$syncChannelHash() => r'fa3b02153c83b41c5ea5e20bbfedbed45e5d2a39';
+String _$syncChannelHash() => r'a678e9b22f27b57b7180a0792557937ea47e45dd';
 
 /// See also [syncChannel].
 @ProviderFor(syncChannel)
@@ -294,7 +294,7 @@ class _SyncChannelProviderElement extends AutoDisposeFutureProviderElement<void>
   int get channelId => (origin as SyncChannelProvider).channelId;
 }
 
-String _$syncAllChannelsHash() => r'30122a8152c36cb1dbd527298b39cec37db2b6b6';
+String _$syncAllChannelsHash() => r'8705581b76eae9eac493d0134fd6bdad418672e0';
 
 /// See also [syncAllChannels].
 @ProviderFor(syncAllChannels)

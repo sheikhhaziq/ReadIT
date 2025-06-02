@@ -33,6 +33,7 @@ Future<List<ArticleWithChannel>> articleWithChannelPage(
         channelTitle: article.channel.value?.title,
         channelImage: article.channel.value?.image,
         channelLink: article.channel.value?.link,
+        feedUrl: article.channel.value?.feedUrl,
       ),
     );
   }

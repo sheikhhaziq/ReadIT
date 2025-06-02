@@ -9,6 +9,7 @@ class IsarChannel {
   Id id = Isar.autoIncrement;
 
   late String title;
+  late String feedUrl;
   String? link;
   String? description;
   String? image;
@@ -16,6 +17,7 @@ class IsarChannel {
   String? publisher;
   String? rights;
   String? language;
+  DateTime? lastBuildDate;
   DateTime lastUpdated = DateTime.now();
 
   final articles = IsarLinks<IsarArticle>();
