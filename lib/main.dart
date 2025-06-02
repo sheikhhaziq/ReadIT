@@ -28,6 +28,9 @@ class MyApp extends StatelessWidget {
               systemOverlayStyle: SystemUiOverlayStyle(
                 systemNavigationBarColor: Colors.transparent,
                 systemNavigationBarIconBrightness: Brightness.dark,
+
+                statusBarColor: Colors.transparent,
+                statusBarIconBrightness: Brightness.dark,
               ),
             ),
             useSystemColors: true,
@@ -44,6 +47,8 @@ class MyApp extends StatelessWidget {
               systemOverlayStyle: SystemUiOverlayStyle(
                 systemNavigationBarColor: Colors.transparent,
                 systemNavigationBarIconBrightness: Brightness.light,
+                statusBarColor: Colors.transparent,
+                statusBarIconBrightness: Brightness.light,
               ),
             ),
             useSystemColors: true,
